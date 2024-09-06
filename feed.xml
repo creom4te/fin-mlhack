@@ -3,14 +3,14 @@
     <title>Cronicas de Creo </title>
     <link href="https://creom4te.com/feed.xml" rel="self" />
     <link href="https://creom4te.com" />
-    <updated>2024-09-06T20:15:16-03:00</updated>
+    <updated>2024-09-06T20:40:08-03:00</updated>
     <author>
         <name>Creom4te</name>
     </author>
     <id>https://creom4te.com</id>
 
     <entry>
-        <title>salida &#x3D; relu(dot(entrada.W)+b)</title>
+        <title>MNIST</title>
         <author>
             <name>Creom4te</name>
         </author>
@@ -22,13 +22,14 @@
             <summary>
                 <![CDATA[
                         <img src="https://creom4te.com/media/posts/14/MNIST-.webp" alt="Obtenido de Koushik" />
-                    "En algun lugar lei que la mejor manera de aprender matematica en programacion es usando las operaciones en lineas de&hellip;
+                    salida = relu(dot(entrada.W)+b) "En algun lugar lei que la mejor manera de aprender matematica en programacion es usando las operaciones&hellip;
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
                     <p><img src="https://creom4te.com/media/posts/14/MNIST-.webp" class="type:primaryImage" alt="Obtenido de Koushik" /></p>
-                <p><span style="color: #169179;"><em>"En algun lugar lei que la mejor manera de aprender matematica en programacion es usando las operaciones en lineas de codigo"</em></span></p>
+                <h1>salida = relu(dot(entrada.W)+b)</h1>
+<p><span style="color: #169179;"><em>"En algun lugar lei que la mejor manera de aprender matematica en programacion es usando las operaciones en lineas de codigo"</em></span></p>
 <p><span style="color: #000000;">Hoy quiero contarles acerca de las Redes Neuronales Artificiales. Pero en especial del Deep Learning.</span></p>
 <p><span style="color: #000000;">Para comenzar dejenme explicarles el titulo. Es simplemente una operacion matematica escrita en una linea de codigo que dice algo asi: <em>la <strong>salida</strong> es igual al producto "punto" de un tensor de <strong>entrada</strong> con un tensor <strong>W</strong>. A la matriz resultante de esa operacion (si! es matriz... entonces es un tensor de 2 ejes) se le suma el vector <strong>b</strong> (como habras deducido si es vector es de 1 solo eje). A TODO ese resultado se le aplica la funcion de activacion "<strong>relu</strong>", que basicamente nos va a decir si se activa o no la neurona. </em></span></p>
 <p><span style="color: #000000;">Nos vamos a enfocar entonces en el "<em>Hola Mundo</em>" de las redes. Y eso es el conjunto</span></p>
