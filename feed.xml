@@ -1,0 +1,1223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+    <title>Cronicas de Creo </title>
+    <link href="https://creom4te.com/feed.xml" rel="self" />
+    <link href="https://creom4te.com" />
+    <updated>2024-09-06T20:15:16-03:00</updated>
+    <author>
+        <name>Creom4te</name>
+    </author>
+    <id>https://creom4te.com</id>
+
+    <entry>
+        <title>salida &#x3D; relu(dot(entrada.W)+b)</title>
+        <author>
+            <name>Creom4te</name>
+        </author>
+        <link href="https://creom4te.com/salida-reludotentradawb/"/>
+        <id>https://creom4te.com/salida-reludotentradawb/</id>
+        <media:content url="https://creom4te.com/media/posts/14/MNIST-.webp" medium="image" />
+
+        <updated>2024-09-06T08:47:25-03:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://creom4te.com/media/posts/14/MNIST-.webp" alt="Obtenido de Koushik" />
+                    "En algun lugar lei que la mejor manera de aprender matematica en programacion es usando las operaciones en lineas de&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://creom4te.com/media/posts/14/MNIST-.webp" class="type:primaryImage" alt="Obtenido de Koushik" /></p>
+                <p><span style="color: #169179;"><em>"En algun lugar lei que la mejor manera de aprender matematica en programacion es usando las operaciones en lineas de codigo"</em></span></p>
+<p><span style="color: #000000;">Hoy quiero contarles acerca de las Redes Neuronales Artificiales. Pero en especial del Deep Learning.</span></p>
+<p><span style="color: #000000;">Para comenzar dejenme explicarles el titulo. Es simplemente una operacion matematica escrita en una linea de codigo que dice algo asi: <em>la <strong>salida</strong> es igual al producto "punto" de un tensor de <strong>entrada</strong> con un tensor <strong>W</strong>. A la matriz resultante de esa operacion (si! es matriz... entonces es un tensor de 2 ejes) se le suma el vector <strong>b</strong> (como habras deducido si es vector es de 1 solo eje). A TODO ese resultado se le aplica la funcion de activacion "<strong>relu</strong>", que basicamente nos va a decir si se activa o no la neurona. </em></span></p>
+<p><span style="color: #000000;">Nos vamos a enfocar entonces en el "<em>Hola Mundo</em>" de las redes. Y eso es el conjunto</span></p>
+<p><span style="color: #000000;">de datos MNIST.</span></p>
+<p><span style="color: #000000;">Basicamente este conjunto es un conjunto de 60000 imagenes de imagenes de numeros manuscritos en blanco y negro (escala de grises) de tamaño 28 de alto por 28 de ancho.</span></p>
+<p><span style="color: #000000;">A me olvidaba tambien hay otro conjunto de 10000 imagenes iguales que sirven como conjunto de prueba o testeo.</span></p>
+<p><span style="color: #000000;">Las imagenes como dije representan numeros manuscritos que van del 0 al 9 y la idea es que mediante el conjunto de entrenamiento (60000 imagenes y sus correspondientes etiquetas) se pueda entrenar un modelo que logre predecir para cualquier etiqueta el numero que le corresponderia.</span></p>
+<p><span style="color: #000000;">Pero antes crear el modelo, tengo que darte algunos datos:</span></p>
+<ul>
+<li><span style="color: #000000;">las etiquetas son matrices al igual que las imagenes. Eso quiere decir que ambos tienen 2 ejes. </span></li>
+<li><span style="color: #000000;">Las etiquetas estan en un tipo de dato <em>uint8 o unsigned 8-bit integer </em>traducido seria algo asi como numero entero sin signo de 8 bits y sirve para representar numeros que van de 0 a 255. Solo pueden ser positivos, 8 bits es 1 byte, cada bit puede ser 0 o 1 lo que deja representar 2^8 = 256 valores.</span></li>
+</ul>
+<blockquote>
+<p><span style="color: #000000;">AHORA SI!</span></p>
+</blockquote>
+<p><span style="color: #000000;">ARQUITECTURA DE LA RED.</span></p>
+<p><span style="color: #000000;">Primero nos copiamos los datos MNIST:</span></p>
+<pre class="language-python"><code>from tensorflow.keras.datasets import mnist
+from tensorflow import keras
+from tensorflow.keras import layers
+
+(train_images, train_labels), (test_images, test_labels) = mnist.load_data()</code></pre>
+<hr>
+<p><span style="color: #000000;">Despues tenemos que darle a los datos la forma que el modelo requiere. Y para eso vamos a pasar las matrices de las etiquetas de valores <em>uint8</em> a valores <em>float32, </em>basicamente porque nos permite tener un rango mas amplio y permiten representar fracciones para calculos de alta precision. Ademas los vamos a escalar para que solo puedan tomar valores entre 0 y 1.</span></p>
+<pre class="language-apacheconf"><code>train_images = train_images.astype("float32") / 255
+test_images = test_images.astype("float32") / 255
+</code></pre>
+<p><span style="color: #000000;">Continuamos con la creacion de la Red propiamente dicha es decir la conjuncion de capas que haran todo el trabajo duro con los datos que les ofrezcamos en este caso los datos del conjunto MNIST.</span></p>
+<pre class="language-apacheconf"><code>modelo = keras.Sequential([
+    layers.Flatten(input_shape=(28, 28)),  
+    layers.Dense(256, activation="relu"),
+    layers.Dense(10, activation="softmax")
+])
+</code></pre>
+<blockquote>
+<p><span style="color: #000000;">Creamos el Modelo (nuestra red) con Sequential le decimos como se van a estructurar las capas. Y dentro creamos 3 capas de las cuales la primera es de tipo flatten es decir que aplana a las imagenes de 28x28 a un vector de 784 pixeles. Esto es necesario porque las capas Densas es decir totalmente conectadas, esperan entradas de 1 sola dimension ademas, estas capas estan conectadas una de ellas con 256 vias y la otra con 10 vias. La primera se opera con una funcion relu y le segunda con una funcion softmax.</span></p>
+</blockquote>
+<p><span style="color: #000000;">La idea con la utilizacion de capas es obtener mejores representaciones de los datos para que el objetivo buscado se logre.</span></p>
+<p><span style="color: #000000;">Tambien necesitamos para que esto funcione 3 cosas mas: Un OPTIMIZADOR, Una FUNCION DE PERDIDA y claro analizar las METRICAS.</span></p>
+<pre class="language-python"><code>modelo.compile(optimizer="rmsprop",
+               loss="sparse_categorical_crossentropy",
+               metrics=["accuracy"])</code></pre>
+<blockquote>
+<p><span style="color: #000000;">Necesitamos compilar tanto el optimizador, la funcion de perdida como las metricas.</span></p>
+</blockquote>
+<p><span style="color: #000000;">Con esto estariamos ya en condiciones de entrenar nuestro modelo. Y lo hacemos de la siguiente manera.</span></p>
+<pre class="language-apacheconf"><code>modelo.fit(train_images, train_labels, epochs=8, batch_size=128,
+           validation_data=(test_images, test_labels))</code></pre>
+<p><span style="color: #000000;">El resultado de entrenar el modelo nos ofrecera informacion sobre el progreso de entrenamiento. El valor de perdida (loss) que para cada epoca nos dira cuan bien o mal el modelo esta ajustando sus predicciones a las etiquetas verdaderas. Por otro lado la precision (acurracy) es decir la cantidad de predicciones correctas que el modelo hace.</span></p>
+<p><span style="color: #000000;">Y finalmente la perdida del conjunto de validacion para cada epoca y la precision del modelo para cada epoca del conjunto de validacion.</span></p>
+<p><span style="color: #000000;">Abajo te mostramos un ejemplo del resultado de entrenar el modelo:</span></p>
+<figure class="post__image"><img loading="lazy"  src="https://creom4te.com/media/posts/14//Captura-de-pantalla-2024-09-06-082156.png" alt="" width="1301" height="268" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/14//responsive/Captura-de-pantalla-2024-09-06-082156-xs.png 300w ,https://creom4te.com/media/posts/14//responsive/Captura-de-pantalla-2024-09-06-082156-sm.png 480w ,https://creom4te.com/media/posts/14//responsive/Captura-de-pantalla-2024-09-06-082156-md.png 768w"></figure>
+<p><span style="color: #000000;">Bueno hagamos algunos experimentos mas:</span></p>
+<pre class="language-apacheconf"><code>modelo = load_model('mi_modelo.h5')
+digitos_a_testear = test_images[99]
+predicciones = modelo.predict(digitos_a_testear)</code></pre>
+<p><span style="color: #000000;">Lo que estamos haciendo es probando que tal lo hace nuestro modelo entrenado "mi_modelo" con la imagen "99" del conjunto de imagenes de testeo.</span></p>
+<figure class="post__image"><img loading="lazy"  src="https://creom4te.com/media/posts/14/Captura-de-pantalla-2024-09-06-132015.png" alt="" width="682" height="98" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/14/responsive/Captura-de-pantalla-2024-09-06-132015-xs.png 300w ,https://creom4te.com/media/posts/14/responsive/Captura-de-pantalla-2024-09-06-132015-sm.png 480w ,https://creom4te.com/media/posts/14/responsive/Captura-de-pantalla-2024-09-06-132015-md.png 768w"></figure>
+<p><span style="color: #000000;">El resultado son las probabilidades de que represente uno de los 9 digitos del conjunto y en este caso podemos ver que en la posicion 9 tenemos el 9.99% de probabilidades de que la imagen 99 sea un 9. Vamos a comprobarlo!</span></p>
+<pre class="language-python"><code>import matplotlib.pyplot as plt
+
+imagen_a_mostrar = test_images[99]
+etiqueta = test_labels[99]
+
+plt.imshow(imagen_a_mostrar, cmap='gray')
+plt.title(f'Etiqueta: {etiqueta}')
+plt.colorbar()
+plt.show()</code></pre>
+<p><span style="color: #000000;">Lo que nos da como resultado que la imagen 99 corresponde a:</span></p>
+<figure class="post__image"><img loading="lazy"  src="https://creom4te.com/media/posts/14/Captura-de-pantalla-2024-09-06-132955.png" alt="" width="617" height="534" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/14/responsive/Captura-de-pantalla-2024-09-06-132955-xs.png 300w ,https://creom4te.com/media/posts/14/responsive/Captura-de-pantalla-2024-09-06-132955-sm.png 480w ,https://creom4te.com/media/posts/14/responsive/Captura-de-pantalla-2024-09-06-132955-md.png 768w"></figure>
+<p> </p>
+<p> </p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Caidas del S&amp;P500 Historicas.</title>
+        <author>
+            <name>Creom4te</name>
+        </author>
+        <link href="https://creom4te.com/caidas-del-sandp500-historicas/"/>
+        <id>https://creom4te.com/caidas-del-sandp500-historicas/</id>
+            <category term="MercadoValores"/>
+            <category term="Inversiones"/>
+            <category term="Finanzas"/>
+
+        <updated>2024-08-07T13:53:21-03:00</updated>
+            <summary>
+                <![CDATA[
+                    Este mes, en este año, el indice de las 500 empresas mas importantes del mundo (S&amp;P500) en la bolsa de&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p class="align-center msg msg--highlight  ">Este mes, en este año, el indice de las 500 empresas mas importantes del mundo (<span style="text-decoration: underline; color: #3598db;">S&amp;P500</span>) en la bolsa de Estados Unidos. Mostro indicios de caida 💸📉 lo suficientemente evidentes para que la red X muestre una infinidad de posteos relacionadas a esta situacion.</p>
+<p>Las alzas de las tasas de la Reserva Federal acumuladas a lo largo de todo este tiempo, comenzaron a afectar el empleo, sector que siempre se resiente.</p>
+<p>El "factor sushi" 🇯🇵 🐟🍣 dijeron algunos amplifico la caida, ya que el mercado Japones mostro mediante el indice Nikkei una caida de mas del <span style="text-decoration: underline;">10%</span> en un dia.  </p>
+<p class="align-left">Luego nos enteramos que el banco de japon imprimio cantidades de dinero "yenes" al estilo Massa. Y aumento la tasa de interes del 0 al 0.25 provocando que los especuladores sufran sentimientos de perdida permitieron que el banco se convierte en el mayor tenedor de ETF del Nikkei. Con una inflacion persistente en su pais de mas del 2%. Todos elementos mas que suficientes para detener el "carry trade" que los especuladores venian haciendo entre continentes.</p>
+<p class="align-left">Esta situacion no aislada de los mercados mundiales impacto de lleno en el <span style="color: #3598db;">S&amp;P500</span> a tal punto, de que muchos comenzaron a preguntarse si comenzaba el crash en occidente.</p>
+<p class="align-left">Una catarata de informacion al respecto comenzo a surgir en la red de redes y de esta manera me encontre en X con un post que especulaba, hacia una suerte de prediccion 🧙‍♂️ de posibilidades que el indice se viniera abajo a nivel de los grandes crash historicos.</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/13/Captura-de-pantalla-2024-08-07-171644.png" alt="" width="738" height="626" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/13/responsive/Captura-de-pantalla-2024-08-07-171644-xs.png 300w ,https://creom4te.com/media/posts/13/responsive/Captura-de-pantalla-2024-08-07-171644-sm.png 480w ,https://creom4te.com/media/posts/13/responsive/Captura-de-pantalla-2024-08-07-171644-md.png 768w"></figure>
+<p>Este post me dio la iniciativa suficiente para analizar un poco el indice a nivel historico y ver que paso en los grandes crashes que el mismo tuvo. Al menos a nivel grafico.</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/13/Captura-de-pantalla-2024-08-04-223729.png" alt="" width="1756" height="830" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/13/responsive/Captura-de-pantalla-2024-08-04-223729-xs.png 300w ,https://creom4te.com/media/posts/13/responsive/Captura-de-pantalla-2024-08-04-223729-sm.png 480w ,https://creom4te.com/media/posts/13/responsive/Captura-de-pantalla-2024-08-04-223729-md.png 768w"></figure>Fijense que marque cuatro caidas, la del 29' que es la primera y la mas pronunciada a la cual le siguen la del 38' con la segunda guerra mundial, la del 72' con la crisis del petroleo y watergate para que finalmente llegue la del 08' con la crisis de las hipotecas subprime.</p>
+<p>Estas son las mas relevantes graficamente. Ya que se produjeron en lapsos no menores a los <em><span style="text-decoration: underline;">2 años</span></em> y con caidas no menores al <span style="text-decoration: underline;"><em>40%</em></span> del valor del indice. Esto deberia ser un dato historico a considerar por cualquier inversor.</p>
+<p>Ademas en cada una de las caidas se perdio en promedio el equivalente a 1usd en el valor de la moneda. 👀</p>
+<p>No voy a explicarte lo obvio que se ve en el grafico, pero es claro que no estamos en la misma situacion a la fecha de este posteo.</p>
+<p> </p>
+<p> </p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Datos.</title>
+        <author>
+            <name>Creom4te</name>
+        </author>
+        <link href="https://creom4te.com/datos/"/>
+        <id>https://creom4te.com/datos/</id>
+
+        <updated>2024-04-27T23:20:04-03:00</updated>
+            <summary>
+                <![CDATA[
+                    Cuando intentamos comprender que son los datos surgen muchas aplicaciones para los datos que nos hacen divagar, pensando que los&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>Cuando intentamos comprender que son los datos surgen muchas aplicaciones para los datos que nos hacen divagar, pensando que los datos pueden ser todo lo que necesitamos para dar respuesta a cualquier pregunta. </p>
+<p>Entonces retomando si queremos conocer una situacion necesitamos datos, pero mas importante aun, necesitamos hacerlos hablar. </p>
+<p>Imaginemos que los datos que tenemos es todo, no hay chance de experimentar para obtener otros datos o resultados de observaciones. Entonces que podemos hacer?</p>
+<p>La respuesta puede venir de los modelos causales. Lo que Judea Pearl describio como escalera de causalidad. La cual consta de 3 escalones: <span style="color: #2dc26b;">Asociaciones, Intervenciones y Contrafactuales</span>.</p>
+<p>Usamos esta descripcion realizada por Pearl, a los fines de describir distintos niveles de relaciones entre las variables (datos). Entonces comencemos con el primer peldaño.</p>
+<p>La <span style="color: #2dc26b;">Asociacion</span>, es la relacion que hacemos de dos variables que en principio pueden provenir del mismo origen y eso nos prepara para tomar decisiones sobre el posible comportamiento de una de estas variables, en base al comportamiento de la otra variable. Gracias a la <span style="text-decoration: underline; color: #f1c40f;">observacion </span>es que podemos realizar esta actividad, es decir asociar variables entre si, teniendo en cuenta su comportamiento.</p>
+<p>Entonces como ejemplo practico podriamos decir que si al lanzarse un nuevo dispositivo movil esta presentacion y posterior pre venta arrojan datos positivos se podria asociar a la suba de ventas que tendra a futuro el nuevo dispositivo.</p>
+<hr>
+<p>En el segundo escalon tenemos la <span style="color: #2dc26b;">Intervencion</span>, en este caso nuestra intencion es <span style="text-decoration: underline; color: #f1c40f;">introducir</span> nuevos datos al sistema para analizar su comportamiento y entender como funciona esta relacion.</p>
+<p>Por ejemplo: si introducimos una capa profunda mas en una red neuronal convolucional para analizar imagenes, obtendremos resultados mejores en las salidas o no lograremos mejoras.</p>
+<hr>
+<p>Finalmente en el tercer escalon tenemos los <span style="color: #2dc26b;">contrafactuales</span>, en este caso  lo que estamos buscando es obtener informacion sobre una realidad alternativa es decir que ocurriria si los datos fueran opuestos totalmente a los obtenidos o con los cuales contamos.</p>
+<p>Ejemplo, el analisi sobre una accion del mercado de valores, arroja un 20% de probabilidad de que la misma suba de precio en el dia. Decidimos comprar un total de 20k (mil) acciones. Entonces <span style="text-decoration: underline;"><span style="color: #f1c40f; text-decoration: underline;">imaginemos</span></span> que ocurriria si la accion baja un 40% ese dia en vez de subir el 20% que estimamos.</p>
+<h4>Como estudiamos los datos.</h4>
+<p>Tenemos que tomar los datos con los que contamos y con ellos realizar <em>Ensayos Controlados Aleatorizados</em> ECA.</p>
+<p>Y para esto lo que hacemos es tomar los datos, asignarlos aleatoriamente, tanto  a los grupos de ensayo como los de control o de testeo y prueba.</p>
+<h4>Los datos nos ayudan a tomar decisiones?</h4>
+<p>Asociacion -  vamos a introducir la matematica en el estudio de los datos para cuantificar las relaciones de asociacion entre ellos, usando la <em><strong>probabilidad condicional </strong></em></p>
+<p>Matematicamente seria: P (X=x | Y=y) - la probabilidad de que X tome el valor de x si Y toma el valor y. </p>
+<p>ejemplo: </p>
+<p>Una persona vende comida frente a tu trabajo. Todos los dias a la hora de ingreso compras una porcion de comida para desayunar. Cual es la probabilidad de que sigas comprando es aporcion a ese persona si muda su puesto a una cuadra de tu trabajo?</p>
+<p>Para dar alguna respuesta causal a esto vamos a tener que tomar en consideracion las "modelos causales estructurales", de otra forma se nos va a hacer dificil dar una respuesta. Y que son estos MCE, podriamos decir que son herramientas que me permiten codificar las relaciones causales entre variables y los necesitamos para <em>generar datos.</em></p>
+<p>Lo siguiente seria saber como generar estos datos y para ello seguiremos una serie de pasos:</p>
+<ol>
+<li>determinemos las variables asociadas al relato. Pueden ser observables o latentes</li>
+<li>una vez que tenemos las variables vamos a determinar si son exogenas es decir que no estan determinadas como variables por otras. Y por otra lado si son endogenas es decir que otras variables del modelo las construyen.</li>
+<li>luego vamos a construir el diagrama causal, el que consta de las variables, sus relaciones y los parametros. Las variables se conectan mediante flechas que indican dependencia o covariacion (una flecha con una punta dependencia y si tiene puntas en ambos extremos covariacion)</li>
+<li>ahora necesitamos definir las ecuaciones estructurales que relacionan las variables endogenas. Estas ecuaciones deben expresar como las variables endogenas dependen de las exogenas y de otras endogenas.</li>
+<li>tambien necesitamos estimar parametros, utilizando tecnicas como el metodo de maxima verosimilitud para estimar los coeficientes de las ecuaciones. Observamos los resultados y ajustamos.</li>
+<li>Finalmente lo llevamos a la programacion en python.</li>
+</ol>
+<p>Vamos a hacer una interpretacion sencilla del problema. Supongamos que las variables que tenemos en el problema son ubicacion del negocio y el tiempo que abosrve esta actividad. Por otro lado las constantes son los dias de la semana, el precio y la porcion de comida. otras variables posibles asociadas son que hay dias que no vamos a trabajar, hay dias que no llegamos a tiempo y las posibles tardanzas en el trabajo.</p>
+<p>variables endogenas: ubicacion del negocio uN, tiempo que me lleva comprar tC</p>
+<p>variables exogenas: no se concurre al trabajo nT, falta de tiempo aT, tardanzas aceptables tA</p>
+<p>constantes: dias de la semana laborales dL, precio de la comida pC.</p>
+<p>nT:= tA - 1</p>
+<p>aT:= (uN + tC) - nT</p>
+<p>tA:= nT = 0</p>
+<p>uN:= </p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>MS-DOS</title>
+        <author>
+            <name>Creom4te</name>
+        </author>
+        <link href="https://creom4te.com/ms-dos/"/>
+        <id>https://creom4te.com/ms-dos/</id>
+        <media:content url="https://creom4te.com/media/posts/11/39.png" medium="image" />
+
+        <updated>2024-04-25T20:04:53-03:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://creom4te.com/media/posts/11/39.png" alt="" />
+                    Aprovechando que Microsoft abrio el codigo fuente y los binarios compilados del "Mitico" Sistema Operativo. Aca te dejamos el enlace&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://creom4te.com/media/posts/11/39.png" class="type:primaryImage" alt="" /></p>
+                <p>Aprovechando que Microsoft abrio el codigo fuente y los binarios compilados del "Mitico" Sistema Operativo.</p>
+<p>Aca te dejamos el enlace a sus versiones: 1.25, 2.0 y 4.0:</p>
+<h3 class="align-center"><a href="https://github.com/microsoft/MS-DOS" target="_blank" rel="noopener noreferrer" class="fit primary large button">MS-DOS</a></h3>
+<p>Espero lo puedas disfrutar como yo. Saludos!!</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Enfoque Causal o Estadistico.</title>
+        <author>
+            <name>Creom4te</name>
+        </author>
+        <link href="https://creom4te.com/enfoque-causal-o-estadistico/"/>
+        <id>https://creom4te.com/enfoque-causal-o-estadistico/</id>
+        <media:content url="https://creom4te.com/media/posts/10/66.png" medium="image" />
+
+        <updated>2024-04-24T21:01:55-03:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://creom4te.com/media/posts/10/66.png" alt="" />
+                    En el mundo del Aprendizaje Automatico hay un area de mi interes. Se llama Inferencia Causal. Intentemos entre todos entender,&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://creom4te.com/media/posts/10/66.png" class="type:primaryImage" alt="" /></p>
+                <p>En el mundo del Aprendizaje Automatico hay un area de mi interes. Se llama Inferencia Causal.</p>
+<p>Intentemos entre todos entender, que es la "CAUSALIDAD". Y para eso no creo que se me ocurra mejor idea que casos practicos y reales, por ejemplo: en el ambito de la investigacion forense es normal para los profesionales hablar de causa y efecto. </p>
+<ul>
+<li>Un Medico Forense (Legista), cuando describe una lesion tambien indica en su informe que "elemento" pudo haber causado esa lesion en base al efecto que observa sobre la lesion.</li>
+<li>Un Accidentologo, cuando analiza deformaciones sobre la estructura de un automovil en su informe, toma en consideracion que fuerza fue la necesaria para causar esa deformacion.</li>
+<li>Un Fiscal cuando acusa, relaciona un motivo con un resultado, fundamentando que el motivo causo el resultado que se intenta asociar a una persona.</li>
+</ul>
+<p>Y asi podriamos seguir hablando de la relacion Causa-Efecto. Pero detengamonos un momento y veamos que tambien hay otras teorias. Como la de David Hume (Filosofo del siglo XVIII).</p>
+<p>Quien indicaba que la relacion causa-efecto no era algo cierto, sino mas bien que ciertos acontecimientos del mundo estan "relacionados" entre si. Y versaba algo asi como "...de hecho, lo unico que encontramos es que un acontecimiento sigue a otro...La mente no siente ningun sentimiento o impresion interna de esta sucesion de hechos."</p>
+<p>Entonces para salirnos de la filosofia...cosa que realmente no es mi fuerte. Podemos extraer de esa informacion. Que exsiste al menos una "asociacion" entre distintos elementos para generar un hecho. Lo que nos permite intentar establecer o al menos aproximarnos a entender si uno produce o causa el otro. Y las redes neuronales artificiales entrenadas de forma "supervisada", son un buen elemento para comenzar ya que en ellas lo que se intenta encontrar es una relacion entre los datos de entrada con los datos de salida. Lo que se traduce en encontrar aquellos algoritmos que realmente muestran que datos de entrada predicen la salida y ahi es donde se pone de manifiesto la "asociacion" de la que venimos hablando.</p>
+<p>Bien!, cabria a aprtir de aqui la siguiente pregunta. Como encontramos esos algoritmos que nos ayuden a asociar de forma certera los datos de entrada con los de salida?</p>
+<p>Y la respuesta que puedo darte es: Mediante las INTERVENCIONES es decir mediante ensayos controlados y aleatorizados, de forma tal de evitar las variables CONFUSORAS.</p>
+<p>Variables Confusoras: son aquellas que generan relaciones espurias entre las variables, que intentamos relacionar. Es decir que nos hace creer que las variables estan relacionadas entre si, cuando la realidad es que hay una o mas variables confusoras que las relacionan y no de forma directa entre ellas como creemos.</p>
+<h3>Vamos a ver un ejemplo claro, o al menos eso espero.</h3>
+<p>Tomemos las Finanzas y ampliemos nuestro campo de conocimiento o nuestra mente a la forma en que el mercado de valores (la bolsa) trabaja diariamente. </p>
+<ul>
+<li>Todos los dias habiles se operan acciones de empresas (se compran y venden)</li>
+<li>Esta compra y venta genera que el <span style="text-decoration: underline;">precio </span>suba o baje.</li>
+<li>Sube cuando hay mas compradores que vendedores y baja en caso contrario.</li>
+<li>Este intercambio genera v<span style="text-decoration: underline;">olumen </span>en el mercado es decir un monto de acciones comerciadas.</li>
+</ul>
+<p>Entonces si llevamos bien la cuenta aqui ya tenemos 2 variables PRECIO y VOLUMEN. Podriamos preguntarnos si nos conviene comprar cuando el precio baja y vender cuando el precio sube. Seria lo mas logico verdad?.</p>
+<p>El problema surge conocer "cuando" esto ocurrira.  (Si lo supieramos todos seriamos ricos)</p>
+<p>Pero... Si estan relacionados el precio y el volumen entonces podria realmente conocer cuando el precio suba o baje?. Vamos a probarlo.</p>
+<p>Primero descarguemos los datos de una accion mensual para que notemos bien el concepto. Vamos a hacer uso de python, la API de alphavantage para descargar los datos y de pandas para crear el dataframe que despues vamos a trabajar.</p>
+<p>Elegimos como objetivo la accion de MERCADO LIBRE. (MELI)</p>
+<pre class="language-python"><code>import pandas as pd
+from alpha_vantage.timeseries import TimeSeries
+
+try:
+    df = pd.read_csv('./tu_archivo.csv', index_col=0)
+    print("DataFrame cargado desde el archivo CSV.")
+except FileNotFoundError:
+    print("Archivo CSV no encontrado. Solicitando datos a la API...")
+   
+    ts = TimeSeries(key="Tu-API-Key", output_format='pandas')
+    data, meta_data = ts.get_daily(symbol='MELI', outputsize='full')
+    df = pd.DataFrame(data)
+
+    df.to_csv('./nuevo_archivo.csv')
+    print("DataFrame guardado en el archivo CSV.")</code></pre>
+<p>Si ahora queremos ver el contenido de lo que acabamos de almacenar tenemos:</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/10/31-2.png" alt="" width="591" height="267" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/10/responsive/31-2-xs.png 300w ,https://creom4te.com/media/posts/10/responsive/31-2-sm.png 480w ,https://creom4te.com/media/posts/10/responsive/31-2-md.png 768w"></figure>
+<p>Pero tambien le pedimos los metadatos asique veamos que nos trajo:</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/10/32.png" alt="" width="1313" height="48" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/10/responsive/32-xs.png 300w ,https://creom4te.com/media/posts/10/responsive/32-sm.png 480w ,https://creom4te.com/media/posts/10/responsive/32-md.png 768w"></figure>
+<p>Entonces en resumen tenemos los precios diarios de Mercado Libre en Bolsa, el volumen operado, datos relativos a la cantidad de informacion y la zona horaria.</p>
+<p>A continuacion lo que hice fue hacer una grafica de los dias del mes de marzo de 2024 y graficarlos.</p>
+<p>Tambien los numere y les di color verde si son dias donde el precio subio o rojo si son dias donde el precio bajo. A los fines de darte una mejor vision de la pregunta a responder.</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/10/37.png" alt="" width="1000" height="500" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/10/responsive/37-xs.png 300w ,https://creom4te.com/media/posts/10/responsive/37-sm.png 480w ,https://creom4te.com/media/posts/10/responsive/37-md.png 768w"></figure>
+<p>Ahora con esto a la vista me podrias decir si podemos <span style="text-decoration: underline;"><em>inferir causalmente</em></span> la relacion entre estas 2 variables? Pensalo un momento y despues segui.</p>
+<p>Si te pongo lado a lado ambas variables pero en los ejes x e y opuestos, te ayuda?</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/10/33.png" alt="" width="1638" height="439" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/10/responsive/33-xs.png 300w ,https://creom4te.com/media/posts/10/responsive/33-sm.png 480w ,https://creom4te.com/media/posts/10/responsive/33-md.png 768w"></figure>
+<p>Esto muestra claramente que NO hay relacion lineal o directa entre ambas variables, es decir el volumen NO condiciona el precio y el precio NO condiciona el volumen. A las claras esta que no hay relacion causal o mejor dicho no podemos inferir causalmente una en base a la otra de forma lineal. Es decir son independientes entre si y su realacion es ESPURIA.</p>
+<p>Pero tambien me da otra INFORMACION que es <strong>mucho mas importante!</strong> Existe 1 o + variables <span style="text-decoration: underline;">confusoras</span> aqui. Entonces es nuestro trabajo descubrirlas en base a los datos.</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/10/34.png" alt="" width="308" height="118" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/10/responsive/34-xs.png 300w ,https://creom4te.com/media/posts/10/responsive/34-sm.png 480w ,https://creom4te.com/media/posts/10/responsive/34-md.png 768w"></figure>
+<p>Sin embargo aca todavia no te conte de la paradoja de <strong>Simpson</strong> o efecto <strong>Yule-Simpson</strong>. Esta paradoja introduce la idea de que una "tendencia" en los datos, desaparece cuando se combina con otros datos incluso aparece la tendencia contraria.</p>
+<p>En este caso eso ocurriria si por ejemplo agregaramos otra variable que permita cambiar el conocimiento hasta aqui adquirido. Es decir si agregamos por ejemplo la variable "tiempo". Entonces aparece una relacion entre precio y volumen que hasta el momento desconocemos y si esto resulta real. Entonces la paradoja Simpson se cumple y ademas encontramos nuestra variable confusora.</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Cookies - Vectores de ataque</title>
+        <author>
+            <name>Creom4te</name>
+        </author>
+        <link href="https://creom4te.com/cookies-vectores-de-ataque/"/>
+        <id>https://creom4te.com/cookies-vectores-de-ataque/</id>
+        <media:content url="https://creom4te.com/media/posts/9/cookies.png" medium="image" />
+
+        <updated>2024-04-22T13:57:33-03:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://creom4te.com/media/posts/9/cookies.png" alt="" />
+                    Es interesante este tema y creo que con esto hacemos el trio perfecto, porque ya hablamos de que son las&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://creom4te.com/media/posts/9/cookies.png" class="type:primaryImage" alt="" /></p>
+                <p>Es interesante este tema y creo que con esto hacemos el trio perfecto, porque ya hablamos de que <strong>son</strong> las cookies en detalle para los formados. Tambien educamos sobre que podemos hacer para <strong>evitar</strong> problemas con las cookies.</p>
+<p>Ahora quedaria ver como podria un cuaker aprovecharse de las cookies para <strong>utilizarlas</strong> en contra de nosotros. Pero antes que nada veamos como podemos ver las cookies que estan ejecutandose en nuestor navegador:</p>
+<figure class="post__image post__image--center">Elegi una web que explicitamente te esta diciendo <span style="text-decoration: underline; color: #2dc26b;">"nosotros y 822 de nuestros socios usamos cookies y tus datos personales"</span><span style="color: #ecf0f1;"> <span style="color: #7e8c8d;">Con esto queda claro de lo que hablamos.</span></span><br><br><img  src="https://creom4te.com/media/posts/9/Captura-de-pantalla-2024-04-22-191939.png" alt="" width="1910" height="920" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/9/responsive/Captura-de-pantalla-2024-04-22-191939-xs.png 300w ,https://creom4te.com/media/posts/9/responsive/Captura-de-pantalla-2024-04-22-191939-sm.png 480w ,https://creom4te.com/media/posts/9/responsive/Captura-de-pantalla-2024-04-22-191939-md.png 768w"></figure><br><br>Si ahora vemos la pagina mediante el inspector de codigo 😱, que locura de pedidos!!<br><br><figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/9/Captura-de-pantalla-2024-04-22-193546-2.png" alt="" width="1709" height="708" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/9/responsive/Captura-de-pantalla-2024-04-22-193546-2-xs.png 300w ,https://creom4te.com/media/posts/9/responsive/Captura-de-pantalla-2024-04-22-193546-2-sm.png 480w ,https://creom4te.com/media/posts/9/responsive/Captura-de-pantalla-2024-04-22-193546-2-md.png 768w"></figure><br><br>Y esta imagen es solo una parte, de TODAS las que llegaron con la solicitud. La mayoria bloqueadas o con riesgo detectado. Pero algunas si que pasaron de todas formas. <br><br>Si ahora ejecutamos un <span style="color: #169179;">document.cookie</span> podemos ver algunas de ellas, cada separacion con <strong>;</strong> corresponde a una cookie.<br><br><figure class="post__image"><img loading="lazy"  src="https://creom4te.com/media/posts/9/Captura-de-pantalla-2024-04-22-200016.png" alt="" width="1711" height="495" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/9/responsive/Captura-de-pantalla-2024-04-22-200016-xs.png 300w ,https://creom4te.com/media/posts/9/responsive/Captura-de-pantalla-2024-04-22-200016-sm.png 480w ,https://creom4te.com/media/posts/9/responsive/Captura-de-pantalla-2024-04-22-200016-md.png 768w"></figure><br><br>De estas cookies tenemos varias funcionalidades, destacamos:</p>
+<ul>
+<li><strong>eptz=AR</strong>:  ubicación, con “AR” se refiere a Argentina.</li>
+<li><strong>uid_ns=CgEI+mYm5c6I1AAJEj/GAg==</strong>: Esta codificada pero aparenta ser el ID que nos asigna como usuario.</li>
+<li><strong>pbsVisit=first</strong>: Indica que es la primera visita.</li>
+<li><strong>s_vncd=1713841199812%26vn%3D1</strong>: el seguimiento como usuario.</li>
+<li><strong>didomi_token=…, euconsent-v2=…</strong>: Asi se cubre del cumplimiento de regulaciones de privacidad y consentimiento.</li>
+<li><strong>arc-geo=…</strong>: geolocalización.</li>
+</ul>
+<h3>Bueno ya te mostre como se ven en real! estas cookies, ahora vamos a ver como pueden usarlas, para analizarnos y vulnerarnos. </h3>
+<p> </p>
+<blockquote>
+<p>El secuestro de cookies es, de hecho, una técnica utilizada por atacantes para robar información de sesión de los usuarios. En este tipo de ataque, el atacante se apodera de la <strong>cookie</strong> válida de un usuario. Esta cookie se utiliza para autenticar al usuario en un sitio web sin requerir que ingrese sus credenciales nuevamente. Una vez que el atacante tiene acceso a la cookie, puede hacerse pasar por el usuario legítimo y acceder a su cuenta sin necesidad de proporcionar credenciales.</p>
+</blockquote>
+<p>Ahora imaginemos por un momento que somos los malos y creamos un codigo JavaScript y lo inyectamos en una pagina web o lo enviamos en un correo con enlace a un sitio comprometido.</p>
+<p>El codigo seria algo tan sencillo como <code><span style="color: #2dc26b;">var roboTuCookie = document.cookie;</span></code> asi de facil recuperamos todas las cookies del navegador del usuario comprometido.</p>
+<h3>SameSite.</h3>
+<p>Si <a href="http://www.misitioweb.com">www.misitioweb.com</a> tiene un enlace <span style="color: #169179;">&lt;a href="www.otrositioweb.com"&gt;...&lt;/a&gt;</span> va a enviar la o las cookies si <strong>SameSite</strong> no esta seteada o esta seteada en <em>None</em> o <em>Lax</em>. Si "otrositioweb" esta comprometido, es posible obtener las cookies sin mayores problemas, incluso reenviarlas modificadas.<br><br>Si <a href="http://www.misitioweb.com">www.misitioweb.com</a> se precarga mediante <span style="color: #169179;">&lt;link rel="prerender" href=".."/&gt;</span> entonces se ejecuta una solicitud anticipada, si <span style="color: #169179;">SameSite=None</span> entonces, la o las cookies se envian en esta solicitud. En cambio si <span style="color: #169179;">SameSite=Lax</span> no se envia la cookie.<br><br>Si <a href="http://www.misitioweb.com">www.misitioweb.com</a> envia una solicitud AJAX mediante <span style="color: #169179;">$.get("...")</span> por ejemplo, y se incluye la cookie en esa solicitud, la configuracion <span style="color: #169179;">SameSite=None</span> deja que se envie la cookie a "otrositioweb".<br><br>En el caso de no esta seteado <strong>SameSite</strong>, atento a la extension <span style="color: #236fa1;">RFC6265bis</span> los nevegadores deberian tomar por defecto, un comportamiento determinado, por ejemplo si SameSite no se especifica deberia ser por defecto <span style="color: #169179;">SameSite=Lax</span> y si <span style="color: #169179;">SameSite=None</span> deberia tambien ir acompañado de <em>Secure</em>.<br><br></p>
+<h3>CSRF. (cross site request forgery)</h3>
+<p>Como pudimos ver las cookies se adjuntan a casi cualquier solicitud y desconociendo incluso quien inicia la solicitud.<br><br>Para profundizarlo mas, supongamos que <a href="http://www.otrositioweb.com">www.otrositioweb.com</a> esta <strong>vulnerado </strong>y al dirigirnos hacia el, porque ahi hay una imagen que usa <a href="http://www.misitioweb.com">www.misitioweb.com</a> lo que va a ocurrir cuando des click en la imagen o en el enlace de la imagen. Es que se van a enviar nuestras cookies a "<em>otrositioweb</em>" y de esta manera este sitio vulnerado, reenvie nuestra informacion.</p>
+<p>Y que puede pasar? Facil! que nos eliminen publicaciones de nuestra pagina, que nos pongan un cartelito de que fuimos hackeados, etc, etc, etc. O lo que ya mencionamos con anterioridad.<br><br>Configurar bien SameSite, es un metodo eficaz contra este tipo de ataque. Podemos hacer algo mas? Si, bloqueando las cookies, a costa de una menor experiencia de navegacion en las paginas web. Y como se bloquean bueno en las imagenes mas arriba te mostre como se ve cuando se bloquean las cookies. Hay varios metodos para esto, desde la configuracion del navegador hasta el uso de addons (en el caso de mozilla).</p>
+<h3>POST y GET</h3>
+<p><br>Otro vector de ataque son los metodos POST y GET con las cookies, cuando necesitamos modificar un usuario o contraseña o algun otro tipo de dato personal que modifiquemos en un formulario, es siempre mas seguro usar POST antes que GET.<br><br>Esto se debe a que GET deja en el encabezado de la solicitud, en los propios registros del servidor y en el historial del navegador. Los parametros que corresponden a nuestros datos.<br>Si utilizamos GET en vez de POST cuando modificamos parametros de usuario, contraseña, etc. Nos arriesgamos a que cualquiera con el conocimiento, pueda hacer uso de CSRF en un sitio web que no sea de su propiedad.</p>
+<h3>Pero como?</h3>
+<p><br>Si logra cargar en el sitio algo tan simple como una imagen etiquetada o mas facil hacer un comentario con esta carga util, va a poder a traves de GET abusar de CSRF.</p>
+<p>Bueno hay muchisimo mas para seguir hablando y prometo hacer algo de codigo al respecto pero ya es suficiente por el momento. Saludos!!</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Y si tu PC esta infectada?</title>
+        <author>
+            <name>Creom4te</name>
+        </author>
+        <link href="https://creom4te.com/y-si-tu-pc-esta-infectada/"/>
+        <id>https://creom4te.com/y-si-tu-pc-esta-infectada/</id>
+        <media:content url="https://creom4te.com/media/posts/8/Screenshot-2024-04-21-at-15-35-04-Y-si-tu-PC-esta-infectada-LinkedIn.png" medium="image" />
+            <category term="SeguridadInformatica"/>
+            <category term="Hacking"/>
+            <category term="Ethical"/>
+
+        <updated>2024-04-21T12:49:00-03:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://creom4te.com/media/posts/8/Screenshot-2024-04-21-at-15-35-04-Y-si-tu-PC-esta-infectada-LinkedIn.png" alt="" />
+                    Es una creencia del común de las personas creer, que si cuentan con un firewall, un buen antivirus o alguna&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://creom4te.com/media/posts/8/Screenshot-2024-04-21-at-15-35-04-Y-si-tu-PC-esta-infectada-LinkedIn.png" class="type:primaryImage" alt="" /></p>
+                <p id="ember132">Es una creencia del común de las personas creer, que si cuentan con un firewall, un buen antivirus o alguna otra herramienta de software con fines de protección. Ya pueden estar tranquilos navegando en la web, incluso descargar archivos y correrlos mientras no salten las alarmas todo estaría bien.</p>
+<p id="ember133" class="ember-view reader-content-blocks__paragraph">Sin embargo tengo que contarte que eso NO es cierto!!.</p>
+<p id="ember134" class="ember-view reader-content-blocks__paragraph">Cada vez que descargas "algo" de internet, en sitios que no conoces... o incluso que si! conoces, pero no sabes que están vulnerados. Corres el riesgo de dar acceso a tu PC y por extension a otros dispositivos de tu red hogareña a cualquiera, que ande por ahí en algún lado del mundo haciendo maldades.</p>
+<p id="ember135" class="ember-view reader-content-blocks__paragraph">Hoy te voy a contar de uno solo de estos tipos de tecnicas de intrusión porque la idea es hacértelo fácil de entender. Pero fácil, no corto!!.</p>
+<p id="ember136" class="ember-view reader-content-blocks__paragraph">Entonces vamos a tomar una técnica que toma como punta de accion los archivos con extensión <strong><em>.lnk</em></strong></p>
+<hr>
+<p id="ember137" class="ember-view reader-content-blocks__paragraph">Para esto vamos a recrear una situación imaginaria; para que lo puedas dibujar en tu mente y pensar que podrías ser vos el que tenga que soportar este tipo de intrusiones.</p>
+<p id="ember138" class="ember-view reader-content-blocks__paragraph">Como todos los días Diana se levanta de la cama, va al baño y se higieniza luego se sienta a desayunar y mira un poco su celular ojeando las novedades que el día trae. Todavía no es hora de sentarse en la PC a revisar el correo de la empresa para ver que novedades hay y por eso tranquila termina de desayunar y comienza a hacer unos ejercicios, porque el cuerpo hay que cuidarlo o no?.</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/8//Screenshot-2024-04-21-at-12-42-21-1-Y-si-tu-PC-esta-infectada-LinkedIn.png" alt="" width="542" height="541" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-42-21-1-Y-si-tu-PC-esta-infectada-LinkedIn-xs.png 300w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-42-21-1-Y-si-tu-PC-esta-infectada-LinkedIn-sm.png 480w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-42-21-1-Y-si-tu-PC-esta-infectada-LinkedIn-md.png 768w"></figure>
+<p id="ember140" class="ember-view reader-content-blocks__paragraph">En un momento dado suena el despertador y marca que ya es hora de comenzar la jornada laboral, es trabajo remoto, en casa, tranquilo pero hay que hacerlo.</p>
+<p id="ember141" class="ember-view reader-content-blocks__paragraph">Diana mira la pantalla y ve que ya hay + de 10 e-mails que tendrá que revisar entonces, se dispone a hacerlo. Abre 1 a 1 y nota que algunos no tienen mayor importancia, el popular "spam" y otros son de compañeros de trabajo.</p>
+<p id="ember142" class="ember-view reader-content-blocks__paragraph">De repente la procastinacion que nunca se aleja mucho de la mayoría, hace efecto en la mente de Diana y mientras esta divagando un poco ve que hay un e-mail de un amigo que ya hace tiempo no ve. Le da curiosidad y se dispone a verlo mientras lee ve que la invita a reunirse para tomar un café porque según le dice, tiene un problema con un <strong>archivo </strong>que no puede ver y como ella es Informática seguro lo puede ayudar!</p>
+<p id="ember143" class="ember-view reader-content-blocks__paragraph">Diana piensa que es de esas típicas pavadas que les pasa a las personas que no están en el ámbito de la informática y que en general desconocen como solucionar rápido. Ella que es una persona muy predispuesta a ayudar a los demás, le pide que le envié el archivo en cuestión.</p>
+<p id="ember144" class="ember-view reader-content-blocks__paragraph"><em>ESE MISMO DÍA, PERO HORAS MAS TARDE.....</em></p>
+<p id="ember145" class="ember-view reader-content-blocks__paragraph">Después de caminar un largo rato con la mochila al hombro, se sienta en un café a revisar si es que quedo algo pendiente. Entonces saca la Notebook de la mochila, la enciende y mientras revisa unas planillas ve el logo de un nuevo e-email en la barra de notificaciones que es de su amigo y llego con el archivo adjunto.</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/8//Screenshot-2024-04-21-at-12-43-09-1-Y-si-tu-PC-esta-infectada-LinkedIn.png" alt="" width="900" height="409" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-43-09-1-Y-si-tu-PC-esta-infectada-LinkedIn-xs.png 300w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-43-09-1-Y-si-tu-PC-esta-infectada-LinkedIn-sm.png 480w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-43-09-1-Y-si-tu-PC-esta-infectada-LinkedIn-md.png 768w"></figure>Recordando lo hablado anteriormente, lo descarga y lo revisa...</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/8//Screenshot-2024-04-21-at-12-43-55-1-Y-si-tu-PC-esta-infectada-LinkedIn.png" alt="" width="900" height="171" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-43-55-1-Y-si-tu-PC-esta-infectada-LinkedIn-xs.png 300w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-43-55-1-Y-si-tu-PC-esta-infectada-LinkedIn-sm.png 480w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-43-55-1-Y-si-tu-PC-esta-infectada-LinkedIn-md.png 768w"></figure>
+<p id="ember149" class="ember-view reader-content-blocks__paragraph">Lo mira y si, en efecto NO parece un pdf común... por la flechita? Porque no tiene extensión <em>.pdf</em>?</p>
+<p id="ember150" class="ember-view reader-content-blocks__paragraph">Por las dudas decide escanearlo en busca de alguna advertencia de archivo malicioso, entonces lo sube a:</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/8//Screenshot-2024-04-21-at-12-44-43-1-Y-si-tu-PC-esta-infectada-LinkedIn.png" alt="" width="900" height="161" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-44-43-1-Y-si-tu-PC-esta-infectada-LinkedIn-xs.png 300w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-44-43-1-Y-si-tu-PC-esta-infectada-LinkedIn-sm.png 480w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-44-43-1-Y-si-tu-PC-esta-infectada-LinkedIn-md.png 768w"></figure>Y no sale nada asique se queda tranqui y lo abre.</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/8//Screenshot-2024-04-21-at-12-44-50-1-Y-si-tu-PC-esta-infectada-LinkedIn.png" alt="" width="900" height="151" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-44-50-1-Y-si-tu-PC-esta-infectada-LinkedIn-xs.png 300w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-44-50-1-Y-si-tu-PC-esta-infectada-LinkedIn-sm.png 480w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-44-50-1-Y-si-tu-PC-esta-infectada-LinkedIn-md.png 768w"></figure>
+<p id="ember154" class="ember-view reader-content-blocks__paragraph">Lo abre sin problemas, ve que se puede acceder al mismo y a su contenido y aparentemente es un archivo <em>.pdf</em>. Entonces decide comunicarle a su amigo que no tiene problemas en verlo y que si el no puede es probable que no cuente con el software para abrir este tipo de archivo diciéndole que se descargue el adobe y problema solucionado.</p>
+<p id="ember155" class="ember-view reader-content-blocks__paragraph">Su amigo le agradece sigue sus indicaciones y se despide.</p>
+<p id="ember156" class="ember-view reader-content-blocks__paragraph">Diana ya cansada por el ajetreo del día, regresa a casa se ducha, cena algo rápido y se acuesta a dormir.</p>
+<p id="ember157" class="ember-view reader-content-blocks__paragraph">Ya en la mañana del día siguiente comienza con su rutina cotidiana sin mucha preocupación se prepara el desayuno y cuando revisa su celular para su sorpresa ve que el banco la notifico de extracciones en su cuenta bancaria y también ve que por whastapp amigos le dicen que deje de intentar pedirles dinero. Su mama la llama y le pregunta para que saco dinero de su cuenta porque ella no fue y Diana tiene el acceso por las dudas su mama necesite ayuda.</p>
+<p id="ember158" class="ember-view reader-content-blocks__paragraph">Toda esta información de golpe y de repente hacen que Diana se maree y no piense con claridad. Intenta llamar a su mama pero esta no le responde. Comienza a responder mensajes a sus amigos de que ella no les pidió dinero pero siguen llegando mensajes. Intenta comunicarse con el banco pero no logra que le den una solución.</p>
+<p id="ember159" class="ember-view reader-content-blocks__paragraph"><em>Mierd.....!!!</em> grita y ahora que hago?, decide dejar todo teléfono, notebook, PC y salir a caminar para despejar la mente y tomar una mejor decisión sobre como actuar.</p>
+<p id="ember160" class="ember-view reader-content-blocks__paragraph">Mientras camina de repente entiende que la clave esta en analizar que hizo ella en estos días atrás que pueda haber ocasionado todo esto y se da cuenta que TODO lo que no este dentro de sus hábitos digitales cotidianos y "normales". Tiene que ser la respuesta!.</p>
+<p id="ember161" class="ember-view reader-content-blocks__paragraph">Enseguida toda su atención se dirige al contacto sorpresivo de su amigo el cual no veía hace mucho y que ademas, le pidió ayuda con un <strong>archivo</strong>.</p>
+<p id="ember162" class="ember-view reader-content-blocks__paragraph">Ok, regresa rápido a su casa, enciende la notebook y mira el archivo que ahí seguía en su escritorio donde lo había copiado en el café desde el e-mail. Pero muy rápido le surgió la duda sobre como analizarlo. Ella es informática si por supuesto! pero no se dedica a la seguridad informática, ciberseguridad, red team o blue team, ni nada parecido. Y se da cuenta que necesita alguien que sepa lo que hace, entonces decide llamar a Agustín que es un <strong>cuaker</strong>! o eso dice el...</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/8//quaker.jpg" alt="" width="626" height="328" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/8//responsive/quaker-xs.jpg 300w ,https://creom4te.com/media/posts/8//responsive/quaker-sm.jpg 480w ,https://creom4te.com/media/posts/8//responsive/quaker-md.jpg 768w"></figure>
+<p id="ember164" class="ember-view reader-content-blocks__paragraph">Agustín le dice enseguida me paso por tu casa y vemos que podemos hacer. A los minutos tocaban la puerta y si era Agustín que venia con un pendrive en la mano agitando como si fuera una llave del tesoro. Le pide la notebook la enciende y coloca el pendrive en el puerto usb que se encontraba libre.</p>
+<p id="ember165" class="ember-view reader-content-blocks__paragraph">Entonces se dispone a examinar el archivo y en primer lugar da un click derecho y mira en las propiedades del archivo para intentar entender de que se trataba esto:</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/8//Screenshot-2024-04-21-at-12-46-24-1-Y-si-tu-PC-esta-infectada-LinkedIn.png" alt="" width="540" height="739" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-46-24-1-Y-si-tu-PC-esta-infectada-LinkedIn-xs.png 300w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-46-24-1-Y-si-tu-PC-esta-infectada-LinkedIn-sm.png 480w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-46-24-1-Y-si-tu-PC-esta-infectada-LinkedIn-md.png 768w"></figure>
+<p>Enseguida nota que algo no va bien!, el archivo es de tipo .lnk y en el campo "Destino", tiene algo raro. Entonces decide copiar todo lo que hay ene se campo y abrirlo en un bloc de notas para ver bien que es toda esa cadena:</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/8//Screenshot-2024-04-21-at-12-46-31-1-Y-si-tu-PC-esta-infectada-LinkedIn.png" alt="" width="900" height="103" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-46-31-1-Y-si-tu-PC-esta-infectada-LinkedIn-xs.png 300w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-46-31-1-Y-si-tu-PC-esta-infectada-LinkedIn-sm.png 480w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-46-31-1-Y-si-tu-PC-esta-infectada-LinkedIn-md.png 768w"></figure>
+<p id="ember169" class="ember-view reader-content-blocks__paragraph">Y ya no le gusto mucho lo que veía.</p>
+<p id="ember170" class="ember-view reader-content-blocks__paragraph">Se ejecuta una "<strong>powershell</strong>" con 2 parámetros <strong>-ep bypass</strong> y <strong>-c</strong>, luego mediante el método <strong>findstr</strong> busca recursivamente el termino "<em>Sebastián</em>" y una vez que lo encuentra lo desviá al archivo <strong>ruido,ps1</strong></p>
+<p id="ember171" class="ember-view reader-content-blocks__paragraph"><strong>Esto no huele nada bien!! Pero que Mierd....!! dice Agustín.</strong></p>
+<p id="ember172" class="ember-view reader-content-blocks__paragraph">Y se pregunta pero como funciona todo esto? donde esta la carga útil del código malicioso? WTF?.</p>
+<p id="ember173" class="ember-view reader-content-blocks__paragraph">Después de pensar un rato decide mirar en <a class="app-aware-link " target="_self" href="http://app.any.run" data-test-app-aware-link="">app.any.run</a> donde pega esta cadena y observa que pasa.</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/8//Screenshot-2024-04-21-at-12-47-35-1-Y-si-tu-PC-esta-infectada-LinkedIn.png" alt="" width="900" height="413" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-47-35-1-Y-si-tu-PC-esta-infectada-LinkedIn-xs.png 300w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-47-35-1-Y-si-tu-PC-esta-infectada-LinkedIn-sm.png 480w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-47-35-1-Y-si-tu-PC-esta-infectada-LinkedIn-md.png 768w"></figure>
+<p id="ember175" class="ember-view reader-content-blocks__paragraph">Pero de donde salen todos esos comandos? A ver piensa Agustín. Lo ultimo que se creo fue ese archivo ruido,ps1, entonces tiene que se por ahí el camino para desenmarañar esto.</p>
+<p id="ember176" class="ember-view reader-content-blocks__paragraph">Decide entonces hacer una copia del archivo, iniciar la virtual machine que tiene preparada y abrir el archivo ruido,ps1 con el notepad++.</p>
+<p id="ember177" class="ember-view reader-content-blocks__paragraph">Como resultado:</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/8//Screenshot-2024-04-21-at-12-48-29-1-Y-si-tu-PC-esta-infectada-LinkedIn.png" alt="" width="900" height="255" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-48-29-1-Y-si-tu-PC-esta-infectada-LinkedIn-xs.png 300w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-48-29-1-Y-si-tu-PC-esta-infectada-LinkedIn-sm.png 480w ,https://creom4te.com/media/posts/8//responsive/Screenshot-2024-04-21-at-12-48-29-1-Y-si-tu-PC-esta-infectada-LinkedIn-md.png 768w"></figure>
+<p id="ember179" class="ember-view reader-content-blocks__paragraph">Y ahi esta!! mira vos que tramposos...</p>
+<p id="ember180" class="ember-view reader-content-blocks__paragraph">Pero momento acá encontramos el código necesario para descargar "algo" desde fuera y en remoto. Peroooo.... como se ejecuto si Diana me dijo que no descargo nada mas que el archivo pdf y lo abrió.</p>
+<p id="ember181" class="ember-view reader-content-blocks__paragraph">Piensa un rato y no encuentra otro camino mas que el propio archivo por eso decide a la copia que tiene modificarla pasarla a otro formato específicamente en .txt y para eso usa una powershell así:</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/8/Screenshot-2024-04-21-at-14-18-33-1-Y-si-tu-PC-esta-infectada-LinkedIn.png" alt="" width="900" height="158" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/8/responsive/Screenshot-2024-04-21-at-14-18-33-1-Y-si-tu-PC-esta-infectada-LinkedIn-xs.png 300w ,https://creom4te.com/media/posts/8/responsive/Screenshot-2024-04-21-at-14-18-33-1-Y-si-tu-PC-esta-infectada-LinkedIn-sm.png 480w ,https://creom4te.com/media/posts/8/responsive/Screenshot-2024-04-21-at-14-18-33-1-Y-si-tu-PC-esta-infectada-LinkedIn-md.png 768w"></figure>Luego de cambiarle el formato lo abre y.....</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/8/Screenshot-2024-04-21-at-14-18-43-1-Y-si-tu-PC-esta-infectada-LinkedIn.png" alt="" width="900" height="166" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/8/responsive/Screenshot-2024-04-21-at-14-18-43-1-Y-si-tu-PC-esta-infectada-LinkedIn-xs.png 300w ,https://creom4te.com/media/posts/8/responsive/Screenshot-2024-04-21-at-14-18-43-1-Y-si-tu-PC-esta-infectada-LinkedIn-sm.png 480w ,https://creom4te.com/media/posts/8/responsive/Screenshot-2024-04-21-at-14-18-43-1-Y-si-tu-PC-esta-infectada-LinkedIn-md.png 768w"></figure>
+<p id="ember185" class="ember-view reader-content-blocks__paragraph">Ahí esta!! así se descargo ese <strong>malware</strong> "algo".</p>
+<p id="ember186" class="ember-view reader-content-blocks__paragraph">Hasta acá creo que la historia ya cumplió su objetivo. Te invito a NO descargar cualquier cosa de cualquier servidor que hay en toda la red de redes.</p>
+<p id="ember187" class="ember-view reader-content-blocks__paragraph">En otro articulo te voy a hablar mas de estos archivos .lnk</p>
+<p id="ember188" class="ember-view reader-content-blocks__paragraph">Por cierto todo lo aquí mostrado es a fines educativos por lo que todo lo mostrado y graficado es ficticio. Saludos y buena jornada!</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>$COIN - CoinBase</title>
+        <author>
+            <name>Creom4te</name>
+        </author>
+        <link href="https://creom4te.com/coin-coinbase/"/>
+        <id>https://creom4te.com/coin-coinbase/</id>
+        <media:content url="https://creom4te.com/media/posts/7/coinbase-logo.jpg" medium="image" />
+            <category term="MercadoValores"/>
+            <category term="Inversiones"/>
+            <category term="Finanzas"/>
+            <category term="Cedears"/>
+
+        <updated>2024-04-21T12:31:00-03:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://creom4te.com/media/posts/7/coinbase-logo.jpg" alt="" />
+                    $COIN el custodio crypto. El siguiente es una articulo viejo pero que al igual que otros que dejare para que&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://creom4te.com/media/posts/7/coinbase-logo.jpg" class="type:primaryImage" alt="" /></p>
+                <div class="node-section" data-id="a09a5d79-25e6-45f8-ac00-7dc7ee5037de" data-show-on-website="true" data-show-in-email="true" data-show-to-non-subscribers="true" data-show-to-free-subscribers="true" data-show-to-paid-subscribers="true" data-show-with-referral-count="false" data-referral-count-value="0" data-referral-condition="lt" data-padding-top="0" data-padding-right="0" data-padding-bottom="0" data-padding-left="0" data-use-individual-padding="false" data-margin-top="0" data-margin-bottom="0" data-margin-left="0" data-margin-right="0" data-use-individual-margin="false" data-border-width-top="0" data-border-width-right="0" data-border-width-bottom="0" data-border-width-left="0" data-use-individual-border-width="false" data-border-top-left-radius="0" data-border-top-right-radius="0" data-border-bottom-right-radius="0" data-border-bottom-left-radius="0" data-use-individual-border-radius="false" data-border-style="solid" data-differing-visibility="false" data-pm-slice="2 2 []">
+<div class="node-section-inner">
+<h2 data-id="03d95934-55c4-4594-9d01-38d8b83c7fff">$COIN el custodio crypto.</h2>
+<p class="msg msg--success">El siguiente es una articulo viejo pero que al igual que otros que dejare para que leas, tienen la vijencia suficiente sobre el como realizar el <span style="text-decoration: underline;"><strong>analisis de un activo</strong></span>.</p>
+<p class="msg msg--success">Espero sea de tu agrado y como simepre si queres saber mas solo pregunta.</p>
+</div>
+</div>
+<figure data-id="32fb3c0e-4a37-491d-8295-d3ed24e8849a" data-variant="2" data-type="blockquoteFigure">
+<blockquote>
+<p data-id="59d76de2-4691-4233-85fc-6ea18a89ea00">Su acción cerro a <u>141.99u$d</u></p>
+<p class="western" data-id="68625bc4-beef-4308-b9f5-54130403145a">A la fecha de este informe. <mark data-color="#DFD150">09-02-2024</mark></p>
+<p class="western" data-id="c7e94391-c998-4d8f-a61f-8d81ef0eb426">Mientras que el Cedear cerro a <u>6395.5$</u></p>
+<p class="western" data-id="705b10f7-b51a-487d-bbbc-83dd08b33209">El ratio de este Cedear - acción es <mark data-color="#C0C0C0">27:1</mark></p>
+</blockquote>
+<figcaption>@creom4te</figcaption>
+</figure>
+<div class="node-section" data-id="70a27beb-22a5-423b-aad9-4bf783660aba" data-color="#a43fd8" data-show-on-website="true" data-show-in-email="true" data-show-to-non-subscribers="true" data-show-to-free-subscribers="true" data-show-to-paid-subscribers="true" data-show-with-referral-count="false" data-referral-count-value="0" data-referral-condition="lt" data-padding-top="0" data-padding-right="0" data-padding-bottom="0" data-padding-left="0" data-use-individual-padding="false" data-margin-top="0" data-margin-bottom="0" data-margin-left="0" data-margin-right="0" data-use-individual-margin="false" data-border-width-top="0" data-border-width-right="0" data-border-width-bottom="0" data-border-width-left="0" data-use-individual-border-width="false" data-border-top-left-radius="0" data-border-top-right-radius="0" data-border-bottom-right-radius="0" data-border-bottom-left-radius="0" data-use-individual-border-radius="false" data-border-style="solid" data-differing-visibility="false">
+<div class="node-section-inner">
+<p data-id="04b6209c-1c03-4248-80c3-c1cf0c306fe5"><strong><mark data-color="#222222"> 1 Acción a la fecha nos cuesta 172.678,5$</mark></strong></p>
+<div data-type="horizontalRule"><hr></div>
+<h5 id="anlisis-fundamental" data-id="12d6d26c-380d-445c-a998-f9bc71c1dbba" data-anchor="" data-anchor-title="Análisis Fundamental." data-anchor-id="anlisis-fundamental" data-anchor-title-sync="true" data-anchor-id-sync="true"><u>Análisis Fundamental.</u></h5>
+<p class="western" data-id="3f7e3708-beae-40cb-b01d-0c0a6c3b1bea">Creo que SI! hace falta que resuma a que se dedica COINBASE. Mucha gente a día de hoy desconoce en realidad que es.</p>
+<p class="western" data-id="e95e4ac4-babc-4364-859b-7344896c7102">Entonces como lo resumimos?...</p>
+<p class="western" data-id="80bdc778-3e27-409c-8d0a-753b91fd8f63">Podríamos comenzar diciendo que es una empresa que NO tiene una sede central. Que incluso las reuniones de directorio son de forma virtual. Es decir que tiene un enfoque “Remoto”.</p>
+<p class="western" data-id="3623ff17-5687-466e-97e7-000818082220">Provee servicios financieros y tecnológicos, destinados a la nueva cripto economia de hoy en dia.</p>
+<figure id="quote" data-id="88cdfdf4-f3bc-4c20-a632-f31153a28dcb" data-anchor="" data-anchor-title="Quote" data-anchor-id="quote" data-anchor-title-sync="true" data-anchor-id-sync="true" data-variant="1" data-type="blockquoteFigure">
+<blockquote>
+<p data-id="476e71f2-3dad-41bc-887a-37dbe8ba3762">Este analisis se basa en el informe 10-Q, el analisis del 4 Trimestre de 2023 Q/A Call, la convocatoria de resultados del 4 Trimestre de 2023, la carta a los accionistas y ademas información de calidad extraída de la web.</p>
+</blockquote>
+<figcaption></figcaption>
+</figure>
+<p class="western" data-id="44b1cece-12ac-4662-b41a-dfd7d04551fe"><em>"Te aviso que acá no va separado lo positivo de lo negativo (como hacen algunos). La idea detrás de esta decisión es que tengas la oportunidad de discriminar imparcialmente"</em></p>
+<table class="align-center" style="border-collapse: collapse; width: 100%; background-color: #bfedd2; border-color: #169179; border-style: dotted;" border="1">
+<tbody>
+<tr>
+<th style="width: 18.2544%;">
+<p data-id="4d17e915-d80a-4914-a1b2-020cf07ef873">COINBASE</p>
+</th>
+<th style="width: 45.2082%;">
+<p data-id="c64675dc-adb0-4c78-86cb-87c162c7c966"> </p>
+</th>
+<th style="width: 36.6515%;">
+<p data-id="aa3b0ff0-9003-4caa-81f4-49acb49785a4"> </p>
+</th>
+</tr>
+<tr>
+<td style="width: 18.2544%;">
+<p data-id="89e4b652-1223-4748-aa82-ade5b3aa3887">Dato</p>
+</td>
+<td style="width: 45.2082%;">
+<p data-id="79e9181c-9c34-44f4-8e8f-b9c59b763bcf">El valor nominal de la acción es de 0.00001$. Clase A y B comunes.</p>
+</td>
+<td style="width: 36.6515%;">
+<p data-id="13f36d1e-01ec-4ee7-8f78-4f161b89fabc"> </p>
+</td>
+</tr>
+<tr>
+<td style="width: 18.2544%;">
+<p data-id="399e0787-2733-406c-8335-a8c289cc4b39">Información</p>
+</td>
+<td style="width: 45.2082%;">
+<p data-id="0957033d-4af0-4258-80ff-ff7b12ecfd8c">En marzo del 2023 adquirió “One River Digital Asset Management, LLC”</p>
+</td>
+<td style="width: 36.6515%;">
+<p data-id="7bdae4a1-5127-4b35-8368-01bc2cc85c87">Empresa financiera especializada en gestión de activos digitales.</p>
+</td>
+</tr>
+<tr>
+<td style="width: 18.2544%;">
+<p data-id="ce2de24f-6755-443f-9e66-ef55bd421c83">Información</p>
+</td>
+<td style="width: 45.2082%;">
+<p data-id="b3e7b81a-74c2-4bd6-8d82-3fb58f5e6c05">En enero de 2022 adquirió Unbound Security, Inc.</p>
+</td>
+<td style="width: 36.6515%;">
+<p data-id="b15e93a5-0738-45d9-9e66-51ac95023cfc">Empresa de seguridad criptográfica.</p>
+</td>
+</tr>
+<tr>
+<td style="width: 18.2544%;">
+<p data-id="bca01d5e-69d9-4b5e-b189-03d27d3f2d6b">Información</p>
+</td>
+<td style="width: 45.2082%;">
+<p data-id="9d173f1d-554f-48d1-a275-1e482db00c96">En febrero de 2022 adquirió FairXchange, Inc.</p>
+</td>
+<td style="width: 36.6515%;">
+<p data-id="177c5c45-8b74-4f84-94f6-65c4fef99366">Cuyo objetivo es el intercambio de derivados regulados.</p>
+</td>
+</tr>
+<tr>
+<td style="width: 18.2544%;">
+<p data-id="b2df1992-8993-4ab1-aa00-e17a6fbeee1d">Dato</p>
+</td>
+<td style="width: 45.2082%;">
+<p data-id="b7da088c-ecb8-44d6-8f0f-677a46ca2886">Los ingresos por transacciones de individuos y instituciones en los 3 meses finales de 2023</p>
+</td>
+<td style="width: 36.6515%;">
+<p data-id="df4fd17d-d716-42ec-ac1c-b17988e3ef75">288,575 MM de u$d.</p>
+<p data-id="d7f6ea03-697b-4c31-91bc-b16b3227e5bd">Siendo los individuos su principal ingreso.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p data-id="db576307-3650-4695-80cb-9f7ef6145e00" data-pm-slice="1 1 []">Uno de los principales valores de la compañia es el “resguardo” de criptoactivos, para lo cual lo hace a traves de la Declaración de Contabilidad del Personal 121 ("SAB 121").</p>
+<p data-id="7831a404-5749-4620-9d1c-af152e0aa576">Esto la hace objeto de resguardo de los actuales ETF de Bitcoin para el mercado “tradicional”.</p>
+<p data-id="497db7e3-62a9-4177-89e9-438930f3f206">Sin embargo las comisiones que tiene COINBASE respecto a los ETF de BTC, son mayores 1,5 a 4% contra 0.4%. Lo que puede reducir las transacciones de BTC.</p>
+<p data-id="2dc0cb0c-3328-4812-901e-bfa89a0b5f49">Por otro lado, la mayoría de estos ETF usan el servicio de resguardo en billeteras y de claves criptográficas de Coinbase para sus activos cripto.</p>
+<p data-id="e3ddf6b9-1a4e-42e6-b25d-f88abef81aa5">Es mas que claro que la empresa, sigue el camino de mejora y consolidación de servicios dentro del ecosistema cripto. Hay mucho + que escarbar sobre esta empresa pero con lo dicho tenemos una buena introducción.</p>
+<p data-id="3de6c33c-01ea-4e7c-a73b-71bf7ccfada0"><strong>Interpretación</strong> - Todo lo dicho, deja en claro que el ingreso <strong><u>crucial</u></strong> de COINBASE es la transacción de activos criptograficos de individuos e instituciones. Para lo cual inteligentemente adquirió distintas empresas que amplían y aseguran las transacciones.</p>
+<p data-id="e7669d2b-9fa3-4ad1-8fa8-d02b637017b0">Brian Armstrong, Cofundador y CEO: “On chain es el nuevo online, Internet <strong>fue </strong>y es una tecnología innovadora que redefinió nuestras formas de comunicación, negocios e interacción social. Blockchain y las criptomonedas están haciendo lo mismo hoy con una re-descentralización de la web y la introducción de un nuevo bloque de construcción: <strong><u>la propiedad</u></strong>. En lugar de solo leer y escribir en el Internet tradicional, en la cadena, ahora puedes leer, escribir y <em><u>poseer</u></em>.”</p>
+<h4 id="opinin-tcnica" data-id="3fb2dcee-99cd-4fbf-991b-b0e53539044a" data-anchor="" data-anchor-title="Opinión Técnica" data-anchor-id="opinin-tcnica" data-anchor-title-sync="true" data-anchor-id-sync="true"><u>Opinión Técnica</u></h4>
+<p class="western" data-id="81cdf166-346b-474e-9849-002ba16ae269">A partir del 1 de abril de 2021, la Compañía presentó el Certificado de Constitución Restablecido, enmendando y restableciendo su certificado de constitución para autorizar 10,000,000,000 acciones de Clase A comunes, 500,000,000 acciones de Clase B comunes, 500,000,000 acciones comunes no designadas y 500,000,000 acciones preferentes no designadas.</p>
+<p class="western" data-id="5b526881-a995-4ad9-8369-4bbb7f88203e">Ahora si! pasemos al grafico…</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/7/Screenshot-2024-04-21-at-12-30-07-Editing-Que-me-contas-de-COIN.png" alt="" width="662" height="690" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/7/responsive/Screenshot-2024-04-21-at-12-30-07-Editing-Que-me-contas-de-COIN-xs.png 300w ,https://creom4te.com/media/posts/7/responsive/Screenshot-2024-04-21-at-12-30-07-Editing-Que-me-contas-de-COIN-sm.png 480w ,https://creom4te.com/media/posts/7/responsive/Screenshot-2024-04-21-at-12-30-07-Editing-Que-me-contas-de-COIN-md.png 768w"></figure>
+<p data-id="cb370642-dbfc-4684-a008-ed750c22b745" data-pm-slice="1 1 []">Esta mas que claro lo que viene pasando y lo que puede ocurrir con el valor del precio. Solo resta que ustedes lo vean y hagan su propio analisis.</p>
+<p data-id="2f346b51-b0d7-4b95-9d95-d52501a86ee0">Saludos!</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/7/Screenshot-2024-04-21-at-12-28-38-Editing-Que-me-contas-de-COIN.png" alt="" width="650" height="192" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/7/responsive/Screenshot-2024-04-21-at-12-28-38-Editing-Que-me-contas-de-COIN-xs.png 300w ,https://creom4te.com/media/posts/7/responsive/Screenshot-2024-04-21-at-12-28-38-Editing-Que-me-contas-de-COIN-sm.png 480w ,https://creom4te.com/media/posts/7/responsive/Screenshot-2024-04-21-at-12-28-38-Editing-Que-me-contas-de-COIN-md.png 768w"></figure>
+<p> </p>
+</div>
+</div>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>DIVIDENDOS -Cedears</title>
+        <author>
+            <name>Creom4te</name>
+        </author>
+        <link href="https://creom4te.com/dividendos-cedears/"/>
+        <id>https://creom4te.com/dividendos-cedears/</id>
+        <media:content url="https://creom4te.com/media/posts/6/20221006_063643.jpg" medium="image" />
+            <category term="MercadoValores"/>
+            <category term="Inversiones"/>
+            <category term="Finanzas"/>
+            <category term="Cedears"/>
+
+        <updated>2024-04-21T12:23:07-03:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://creom4te.com/media/posts/6/20221006_063643.jpg" alt="" />
+                    Es un excelente tema para tratar. La cuestión es SI los Cedears que el banco Comafi nos ofrece como inversores&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://creom4te.com/media/posts/6/20221006_063643.jpg" class="type:primaryImage" alt="" /></p>
+                <p data-id="56d637c7-1d9a-4a37-a6bc-7b76fb158788" data-pm-slice="1 1 []">Es un excelente tema para tratar. La cuestión es SI los Cedears que el banco Comafi nos ofrece como inversores particulares, tienen la calidad suficiente para ofrecernos la herramienta de los DIVIDENDOS como un instrumento mas de GANANCIAS.</p>
+<p data-id="d052ebae-4130-4333-bf33-49b42f4d07a2">A tal fin me dispuse a analizar que monto es el que pagan cada uno de los Cedears. durante este trabajo que lleve adelante logre separar la paja del trigo es decir NO todos los cedears pagan dividendos, NO todos los cedears pagan buenos dividendos, NO todos los cedears pagan en termino los dividendos, NO todos los cedears incrementan el monto del pago en dividendos.</p>
+<p data-id="84d58c37-c04b-452c-b5d0-b617e9a8d9b5">La información recabada es mucha, los datos analizados son la totalidad de los Cedears, las variables utilizadas son muchas mas. Pero en este newsletter solo te voy a dar un resumen para no aburrirte. Si querés mas info solo hace falta que lo digas y ampliamos.</p>
+<table class="align-center" style="border-collapse: collapse; width: 100%; border-color: #2DC26B; border-style: solid;" border="1">
+<tbody>
+<tr>
+<th style="width: 38.7906%;">
+<p data-id="f680335b-f3bd-47fe-b12c-2afef1d858e2">CEDEARS</p>
+</th>
+<th style="width: 23.5311%;">
+<p data-id="01946f16-b39b-4c4d-b55e-beea710f2b47"> </p>
+</th>
+<th style="width: 37.6497%;">
+<p data-id="318aa52e-637a-445a-835f-a723c9ff8f17"> </p>
+</th>
+</tr>
+<tr>
+<td style="width: 38.7906%;">
+<p data-id="877e9e4f-0677-4da9-becd-a53e506a10a4">Hay un total de</p>
+</td>
+<td style="width: 23.5311%;">
+<p data-id="cf556439-7cc3-4fd2-accb-8937d5978b46">257</p>
+</td>
+<td style="width: 37.6497%;">
+<p data-id="010a013f-856e-4015-b4d0-626b7c48c529">al 26/01/2024</p>
+</td>
+</tr>
+<tr>
+<td style="width: 38.7906%;">
+<p data-id="2ec7d8d9-8530-45db-87ac-fa16c24a3e39">Operan en distintos mercados</p>
+</td>
+<td style="width: 23.5311%;">
+<p data-id="b3c245c0-258e-4321-8a63-988282cdc67e">NYSE, NASDAQ, OTC</p>
+</td>
+<td style="width: 37.6497%;">
+<p data-id="f8ff65c1-a15d-47ba-8429-c57db9132509">No todos los activos tienen su origen en ee.uu</p>
+</td>
+</tr>
+<tr>
+<td style="width: 38.7906%;">
+<p data-id="7b7f92d9-5541-4795-8d69-e35fb9e3bae2">No todas las acciones se particionan en + de 1 cedear</p>
+</td>
+<td style="width: 23.5311%;">
+<p data-id="f7f752c7-3db0-4407-a4de-99cf3b11ad8f">pueden variar de 1 - 144</p>
+</td>
+<td style="width: 37.6497%;">
+<p data-id="033e6536-68ab-4e4b-9ec5-cba2b427f173">Como resultado el dividendo cambien se particiona.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p data-id="a73aff8b-aedd-4c35-af04-e89b49c65c5b">Hay una cuestión que no quiero dejar pasar. Y es la siguiente si tomamos el caso de <mark data-color="#e7d17b">$AMZN</mark> su acción se reparte en <u>144</u> cedears. La pregunta es: <em>Necesitamos esa partición?</em>.</p>
+<p data-id="86c6d0e0-9de8-4713-8d47-6cb928affaf9">Cual es la partición “optima” de una acción?</p>
+<p data-id="1a5a4e83-3481-408f-af9a-55e8d269445a">Desde el punto de vista del que quiere ganar dividendos, podría ser +optimo llegar rápido a una fracción mas rentable del dividendo, a los fines de que tenga sentido el uso de esta herramienta.</p>
+<p data-id="daff9fdf-99b9-4481-ac93-79513d4982cc">Bueno ya para continuar!</p>
+<p data-id="f0afffde-dc1d-4dd4-b47f-b4209adaf266">Sabias que hay un indice de dividendos? Pues si y se llama “<mark data-color="#222222">Dow Jones U.S. Dividend 100™</mark>" Este indice lo que muestra en su grafica es cual es la performance de los grandes pagadores de dividendos del mercado. Y asi es como lo viene haciendo en el año Q1 del año.</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/6/Screenshot-2024-04-21-at-11-44-12-Editing-Los-Cedears-me-pueden-servir-para-ganar-Dividendos.png" alt="" width="631" height="177" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/6/responsive/Screenshot-2024-04-21-at-11-44-12-Editing-Los-Cedears-me-pueden-servir-para-ganar-Dividendos-xs.png 300w ,https://creom4te.com/media/posts/6/responsive/Screenshot-2024-04-21-at-11-44-12-Editing-Los-Cedears-me-pueden-servir-para-ganar-Dividendos-sm.png 480w ,https://creom4te.com/media/posts/6/responsive/Screenshot-2024-04-21-at-11-44-12-Editing-Los-Cedears-me-pueden-servir-para-ganar-Dividendos-md.png 768w"></figure>
+<table class="align-center" style="border-collapse: collapse; width: 100%; border-color: #2DC26B; border-style: solid;" border="1">
+<tbody>
+<tr>
+<th style="width: 55.1911%;">
+<p data-id="48736780-a897-46f1-bfa9-b67f937300f9">Quien esta dentro? de los Cedears CLARO!</p>
+</th>
+<th style="width: 14.1187%;">
+<p data-id="4a591a32-7d60-42a2-ba61-33ddc39d5774">Simbolo</p>
+</th>
+<th style="width: 30.6617%;">
+<p data-id="1c6b6386-e9f0-405d-b691-98472d1b1d24">Area</p>
+</th>
+</tr>
+<tr>
+<td style="width: 55.1911%;">
+<p data-id="368c5b9c-090f-4dc2-a78a-81200d7add3a">Broadcom Inc</p>
+</td>
+<td style="width: 14.1187%;">
+<p data-id="60b68504-5e1d-4fe8-8a7e-be03a11c0296">AVGO</p>
+</td>
+<td style="width: 30.6617%;">
+<p data-id="17de295a-694c-4659-96e9-a7ee67376de3">Tecnologia</p>
+</td>
+</tr>
+<tr>
+<td style="width: 55.1911%;">
+<p data-id="e1043da6-2dfd-495f-88f6-70f5afd3c2d8">Merck &amp; Co Inc</p>
+</td>
+<td style="width: 14.1187%;">
+<p data-id="22488310-9dcc-4f17-804f-bfc7d1ac885c">MRK</p>
+</td>
+<td style="width: 30.6617%;">
+<p data-id="247a3f4f-9d25-45ed-86f1-9c1006b5980c">Cuidados de la Salud</p>
+</td>
+</tr>
+<tr>
+<td style="width: 55.1911%;">
+<p data-id="9089f2b9-cef3-470c-a6cb-5acf345ffe37">AbbVie Inc.</p>
+</td>
+<td style="width: 14.1187%;">
+<p data-id="c1ccd1bc-b5b2-45ce-88cf-2a0b12840ae5">ABBV</p>
+</td>
+<td style="width: 30.6617%;">
+<p data-id="2589ee72-bea7-4b19-94b9-6afd1b5f1264">Cuidados de la Salud</p>
+</td>
+</tr>
+<tr>
+<td style="width: 55.1911%;">
+<p data-id="ba770dc8-9219-411b-8091-e3f74e9fd78c">Home Depot Inc</p>
+</td>
+<td style="width: 14.1187%;">
+<p data-id="8d8bb4a5-55a8-40b0-ba81-df4d7330bc85">HD</p>
+</td>
+<td style="width: 30.6617%;">
+<p data-id="9cd6e312-50dd-4463-bc9e-100eb81a47d2">Servicios de Consumo</p>
+</td>
+</tr>
+<tr>
+<td style="width: 55.1911%;">
+<p data-id="b77f0374-4f2a-48a3-a4e2-c7a8e25f249b">Verizon Communications Inc</p>
+</td>
+<td style="width: 14.1187%;">
+<p data-id="d80f1799-ba9a-47ba-b561-f2c3bf180d40">VZ</p>
+</td>
+<td style="width: 30.6617%;">
+<p data-id="95174090-03d6-4d6e-b606-6b7f04bcb1f6">Telecomunicaciones</p>
+</td>
+</tr>
+<tr>
+<td style="width: 55.1911%;">
+<p data-id="fe77c945-b1df-4001-ae1c-0fb18d3cc6ad">Amgen Inc</p>
+</td>
+<td style="width: 14.1187%;">
+<p data-id="799cee1c-cdbf-47fe-bc26-76d879e5fd71">AMGN</p>
+</td>
+<td style="width: 30.6617%;">
+<p data-id="db382580-72c0-493b-9938-9ca0f059e689">Cuidados de la Salud</p>
+</td>
+</tr>
+<tr>
+<td style="width: 55.1911%;">
+<p data-id="5bcbfe4d-c145-4546-8c88-fb3c736f0cba">Texas Instruments Inc</p>
+</td>
+<td style="width: 14.1187%;">
+<p data-id="f71f5f1c-842f-42f4-abff-9adf2042114f">TXN</p>
+</td>
+<td style="width: 30.6617%;">
+<p data-id="8c370ea8-8914-4081-a763-fd10fa8039e7">Tecnologia</p>
+</td>
+</tr>
+<tr>
+<td style="width: 55.1911%;">
+<p data-id="f8c76de6-e8a0-4da3-a7c0-2d5572e285a6">Cisco Systems Inc</p>
+</td>
+<td style="width: 14.1187%;">
+<p data-id="9852f894-346b-455f-b270-af2129207ee6">CSCO</p>
+</td>
+<td style="width: 30.6617%;">
+<p data-id="4ec954e8-31b3-4cef-8f25-e9def9728216">Tecnologia</p>
+</td>
+</tr>
+<tr>
+<td style="width: 55.1911%;">
+<p data-id="0088ef70-cbce-451b-bd7b-c1df9f7907f7">Chevron Corp</p>
+</td>
+<td style="width: 14.1187%;">
+<p data-id="396e9f53-cccb-44b5-8930-5a99b07239a8">CVX</p>
+</td>
+<td style="width: 30.6617%;">
+<p data-id="636da54c-76fb-4f97-8527-11ce0c459d6d">Petroleo y Gas</p>
+</td>
+</tr>
+<tr>
+<td style="width: 55.1911%;">
+<p data-id="1fe2df5b-b422-41ed-b3e3-9af63ac5a90e">Coca-Cola Co</p>
+</td>
+<td style="width: 14.1187%;">
+<p data-id="66a8a15e-71a5-4695-bfbb-37da29ae3a2f">KO</p>
+</td>
+<td style="width: 30.6617%;">
+<p data-id="35671fde-39f7-43d4-8890-450f5c4c02fc">Bienes de Consumo</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p data-id="dd2bcd4b-4f47-40f6-aa64-2714086c5d21" data-pm-slice="1 1 []">Y los anteriores conforman los 10 primeros del Indice, es decir los mas representativos. Y los tenemos todos en Cedears. Pero hay trampa! veamos…</p>
+<table class="align-center" style="border-collapse: collapse; width: 100%; border-color: #2DC26B; border-style: solid;" border="1">
+<tbody>
+<tr>
+<th style="width: 19.3953%;">
+<p data-id="497faa08-21bd-4a54-9cb3-22a6409c2c44">CEDEAR</p>
+</th>
+<th style="width: 15.5448%;">
+<p data-id="81457bff-9c6f-4d82-ad31-6b2f37e535f6">RATIO</p>
+</th>
+<th style="width: 41.2151%;">
+<p data-id="70c40aaf-5273-49c8-b69d-b9ad11e97b58">DIVIDENDO X CEDEAR</p>
+</th>
+<th style="width: 23.8163%;">
+<p data-id="b5a13b08-f5c3-4395-913d-e93ce53cc978">DIVIDENDO</p>
+</th>
+</tr>
+<tr>
+<td style="width: 19.3953%;">
+<p data-id="119d7751-4b83-4a0d-a360-ffd0a1035ac3">AVGO</p>
+</td>
+<td style="width: 15.5448%;">
+<p data-id="35fb3e70-c560-49c7-834d-f8d10374c75d">39:1</p>
+</td>
+<td style="width: 41.2151%;">
+<p data-id="f245b861-e215-4416-8de1-d7aa7bca26d0">$0.134</p>
+</td>
+<td style="width: 23.8163%;">
+<p data-id="8e16db83-512d-4ef8-bd1f-e8c344790fc5">$5.25</p>
+</td>
+</tr>
+<tr>
+<td style="width: 19.3953%;">
+<p data-id="74851373-8609-4005-b44f-c7674afbc763">MRK</p>
+</td>
+<td style="width: 15.5448%;">
+<p data-id="395e57cf-7755-4c2f-bcb4-dce604bfe5f8">5:1</p>
+</td>
+<td style="width: 41.2151%;">
+<p data-id="72b9bbf0-8cd7-4004-94fc-527b59258acd">$0.154</p>
+</td>
+<td style="width: 23.8163%;">
+<p data-id="2933e8f9-e1cf-4043-9a1b-f03b52e9b7e0">$0.77</p>
+</td>
+</tr>
+<tr>
+<td style="width: 19.3953%;">
+<p data-id="dc2f15d2-1c99-4428-a7a4-ae0e3c63b9c5">ABBV</p>
+</td>
+<td style="width: 15.5448%;">
+<p data-id="aeedecb4-6996-49a1-b4fd-14e2503a6181">10:1</p>
+</td>
+<td style="width: 41.2151%;">
+<p data-id="617ac0d8-44a4-4889-8b36-85f3b620742f">$0.155</p>
+</td>
+<td style="width: 23.8163%;">
+<p data-id="60e02ce4-bbc2-448e-bb91-7ce5c7c0709c">$1.55</p>
+</td>
+</tr>
+<tr>
+<td style="width: 19.3953%;">
+<p data-id="9c113a00-86f1-4f96-a473-06a10438ede6">HD</p>
+</td>
+<td style="width: 15.5448%;">
+<p data-id="2ad02861-695e-4994-bbb8-2b870700a9a0">32:1</p>
+</td>
+<td style="width: 41.2151%;">
+<p data-id="514a344a-a6d2-4063-846e-5c3316c0d6fd">$0.065</p>
+</td>
+<td style="width: 23.8163%;">
+<p data-id="21bc9078-a6ab-40f2-9d56-c65067d43f0f">$2.09</p>
+</td>
+</tr>
+<tr>
+<td style="width: 19.3953%;">
+<p data-id="8dc65596-a5eb-4c52-8f24-2122af49880a">VZ</p>
+</td>
+<td style="width: 15.5448%;">
+<p data-id="b99df620-4ebe-4403-8026-99ffe18ce302">4:1</p>
+</td>
+<td style="width: 41.2151%;">
+<p data-id="dfa13213-9ab4-4f31-8af5-47ebc715743a">$0.166</p>
+</td>
+<td style="width: 23.8163%;">
+<p data-id="3a1242d3-cb29-442a-a127-8b1b5d9dc34c">$0.665</p>
+</td>
+</tr>
+<tr>
+<td style="width: 19.3953%;">
+<p data-id="bb385883-84b1-41e1-9b56-9a94511e536a">AMGN</p>
+</td>
+<td style="width: 15.5448%;">
+<p data-id="b72889d1-57a1-4322-826b-24d791d1045f">30:1</p>
+</td>
+<td style="width: 41.2151%;">
+<p data-id="e7ec38b7-4f2e-4166-b249-a5cb22805c4a">$0.075</p>
+</td>
+<td style="width: 23.8163%;">
+<p data-id="baf694d6-afac-49c2-a19b-19f5193ec470">$2.25</p>
+</td>
+</tr>
+<tr>
+<td style="width: 19.3953%;">
+<p data-id="631bb355-530d-4195-b42e-f8c7d6ba3327">TXN</p>
+</td>
+<td style="width: 15.5448%;">
+<p data-id="7d104e4e-ad73-4ffb-a985-fa3964fe830e">5:1</p>
+</td>
+<td style="width: 41.2151%;">
+<p data-id="e8744dc3-b448-486a-ac1e-1a6b51db55a3">$0.260</p>
+</td>
+<td style="width: 23.8163%;">
+<p data-id="ed3c3e85-fb3e-4cfc-b265-8ff077fcc4d2">$1.30</p>
+</td>
+</tr>
+<tr>
+<td style="width: 19.3953%;">
+<p data-id="10cd4a23-2b74-4409-9218-4b5f2361e8f0">CSCO</p>
+</td>
+<td style="width: 15.5448%;">
+<p data-id="af99a1a5-fc45-4491-8793-4b6d55823914">5:1</p>
+</td>
+<td style="width: 41.2151%;">
+<p data-id="1776d15c-9e04-49cd-b46b-09d3f090bdaa">$0.078</p>
+</td>
+<td style="width: 23.8163%;">
+<p data-id="91d9ccfb-a51c-494b-8bb7-643de1561125">$0.39</p>
+</td>
+</tr>
+<tr>
+<td style="width: 19.3953%;">
+<p data-id="ee6d081a-ee1b-4c27-a55d-2dccfdd5a55f">CVX</p>
+</td>
+<td style="width: 15.5448%;">
+<p data-id="97ab889d-5fef-4ef6-b2cf-4d84e5e468dd">16:1</p>
+</td>
+<td style="width: 41.2151%;">
+<p data-id="f9b0edee-4886-41a9-8c81-b52939f82c75">$0.102</p>
+</td>
+<td style="width: 23.8163%;">
+<p data-id="95f4f7ce-f9dd-4b5f-b2fd-c12945ebfb62">$1.63</p>
+</td>
+</tr>
+<tr>
+<td style="width: 19.3953%;">
+<p data-id="2aef6534-a8e9-4fc5-83d6-7c386a511713">KO</p>
+</td>
+<td style="width: 15.5448%;">
+<p data-id="487ac428-99cf-4d48-81df-3232a8c4dda4">5:1</p>
+</td>
+<td style="width: 41.2151%;">
+<p data-id="543d4595-b800-41ba-8091-ddc3b712e927">$0.092</p>
+</td>
+<td style="width: 23.8163%;">
+<p data-id="ea6e240d-3775-41a6-835f-e4f932cfde02">$0.46</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p data-id="777093ea-59ee-4f87-bcc3-7975a68a59d5">Los anteriores como dije son el top 10 del indice pero no necesariamente los que + pagan. Pero SI los que son consistentes, constantes y pagadores. Los valores de la tabla son nominales sin descuentos de impuestos, comisiones, etc. Como también son los últimos valores informados por las empresas, los cuales en general NO son fijos sino mas bien varían.</p>
+<p data-id="f7124101-64eb-4799-90fa-1af54c1a3765">Pero lo positivo es que los tenemos todos en los cedears lo cual permite a quien quiera utilizar esta herramienta para generar ingresos extras!!</p>
+<p data-id="777093ea-59ee-4f87-bcc3-7975a68a59d5">Los anteriores como dije son el top 10 del indice pero no necesariamente los que + pagan. Pero SI los que son consistentes, constantes y pagadores. Los valores de la tabla son nominales sin descuentos de impuestos, comisiones, etc. Como también son los últimos valores informados por las empresas, los cuales en general NO son fijos sino mas bien varían.</p>
+<p data-id="f7124101-64eb-4799-90fa-1af54c1a3765">Pero lo positivo es que los tenemos todos en los cedears lo cual permite a quien quiera utilizar esta herramienta para generar ingresos extras!!</p>
+<div data-type="horizontalRule"><hr></div>
+<h3 id="para-ir-cerrando-voy-a-mostrarte-un" data-id="1b14c0c6-8b36-43e1-929d-02b026b7305a" data-anchor="" data-anchor-title="Para ir cerrando voy a mostrarte una combinación p …" data-anchor-id="para-ir-cerrando-voy-a-mostrarte-un" data-anchor-title-sync="true" data-anchor-id-sync="true">Para ir cerrando voy a mostrarte una combinación posible para ganar DIVIDENDOS.</h3>
+<h6 id="suponiendo-que-tenes-1-accin-de-cad" data-id="965a7202-b0b2-427e-a472-54e23d6c70ea" data-anchor="" data-anchor-title="Suponiendo que tenes 1 Acción de cada Empresa. Es  …" data-anchor-id="suponiendo-que-tenes-1-accin-de-cad" data-anchor-title-sync="true" data-anchor-id-sync="true">Suponiendo que tenes 1 Acción de cada Empresa. Es decir los Cedears suficientes para completar la acción completa.</h6>
+<table class="align-center" style="border-collapse: collapse; width: 100%; border-color: #2DC26B; border-style: solid;" border="1">
+<tbody>
+<tr>
+<th style="width: 44.6378%;">
+<p data-id="f451305a-325a-460d-84a6-801f8c61b1c8">Símbolo</p>
+</th>
+<th style="width: 25.8129%;">
+<p data-id="8f7257ce-0584-42ea-9ba5-bb25ce3147d4">Ganancia</p>
+</th>
+<th style="width: 29.5208%;">
+<p data-id="9253939c-cffe-4ab9-92ef-821345978cf0">Mes</p>
+</th>
+</tr>
+<tr>
+<td style="width: 44.6378%;">
+<p data-id="02146187-11f5-4bef-8a36-1ea4688abcef">NGG</p>
+</td>
+<td style="width: 25.8129%;">
+<p data-id="f1e42991-1626-43e8-9f7c-7fd5f718adc2">$1.19</p>
+</td>
+<td style="width: 29.5208%;">
+<p data-id="fee50de5-0c38-45e4-9135-8759e1e21d73">Enero</p>
+</td>
+</tr>
+<tr>
+<td style="width: 44.6378%;">
+<p data-id="108dbc4c-50ad-4afd-810f-d78106eb5dde">SIEGY</p>
+</td>
+<td style="width: 25.8129%;">
+<p data-id="de98b68f-e307-4f54-a358-ef700daeca4b">$1.88</p>
+</td>
+<td style="width: 29.5208%;">
+<p data-id="ff1a3c2e-dab1-4e10-9c44-1f8b512a36c1">Febrero</p>
+</td>
+</tr>
+<tr>
+<td style="width: 44.6378%;">
+<p data-id="e6765788-483e-4f63-affd-d107a3af5247">LMT</p>
+</td>
+<td style="width: 25.8129%;">
+<p data-id="a23d12f9-a79a-4c8c-b9c2-b74b7436ef77">$3.15</p>
+</td>
+<td style="width: 29.5208%;">
+<p data-id="0d11876e-b22a-47b5-bd91-e93477af73c9">Marzo</p>
+</td>
+</tr>
+<tr>
+<td style="width: 44.6378%;">
+<p data-id="fab77b58-b4dc-4d6c-88ae-7ed5c9a593d4">LRCX</p>
+</td>
+<td style="width: 25.8129%;">
+<p data-id="c8e25bd7-9fca-4052-a610-47135db5e226">$2.00</p>
+</td>
+<td style="width: 29.5208%;">
+<p data-id="a1ebcbbe-d66a-470d-baab-6e8613f4a068">Abril</p>
+</td>
+</tr>
+<tr>
+<td style="width: 44.6378%;">
+<p data-id="23a05489-e4ad-42c9-87ea-f55d77601860">SAP</p>
+</td>
+<td style="width: 25.8129%;">
+<p data-id="d9d30593-6baf-4dd9-89cb-23f7cc726b6c">$2.18</p>
+</td>
+<td style="width: 29.5208%;">
+<p data-id="02b4e49b-67c9-46ab-9f49-f430acbe48e3">Mayo</p>
+</td>
+</tr>
+<tr>
+<td style="width: 44.6378%;">
+<p data-id="6dc9926f-c0c3-41b9-84fc-2678671f8abe">TM</p>
+</td>
+<td style="width: 25.8129%;">
+<p data-id="c913ad8d-285c-4c55-80e5-1dfe85b81077">$2.49</p>
+</td>
+<td style="width: 29.5208%;">
+<p data-id="39ad79d6-e436-493c-a3c0-fbf2005cffd2">Junio</p>
+</td>
+</tr>
+<tr>
+<td style="width: 44.6378%;">
+<p data-id="97c52fb5-a21e-4c63-8e8f-708fd75c267d">WB</p>
+</td>
+<td style="width: 25.8129%;">
+<p data-id="b95510df-c8c6-46d5-ab39-7e7c4e04e786">$0.85</p>
+</td>
+<td style="width: 29.5208%;">
+<p data-id="28287190-7d6e-4ef9-8314-567bbac9274f">Julio</p>
+</td>
+</tr>
+<tr>
+<td style="width: 44.6378%;">
+<p data-id="6df1a699-0a5a-4987-88c1-f128392d9d5b">YZCAY</p>
+</td>
+<td style="width: 25.8129%;">
+<p data-id="7a2a0eda-0e29-4b05-8a5a-10865121c747">$1.52</p>
+</td>
+<td style="width: 29.5208%;">
+<p data-id="494122b1-fcec-4456-8c86-4566674562f9">Agosto</p>
+</td>
+</tr>
+<tr>
+<td style="width: 44.6378%;">
+<p data-id="abdbc439-41d0-441f-aa6c-c40b30b57ad1">RIO</p>
+</td>
+<td style="width: 25.8129%;">
+<p data-id="e6281a6d-1818-4926-9ace-b44b25b46482">$1.77</p>
+</td>
+<td style="width: 29.5208%;">
+<p data-id="1b2fb5de-1660-47b7-b25e-9638ef93cd07">Septiembre</p>
+</td>
+</tr>
+<tr>
+<td style="width: 44.6378%;">
+<p data-id="aabd7bb2-3f53-4cb4-893e-80484d9f329e">INFY</p>
+</td>
+<td style="width: 25.8129%;">
+<p data-id="803cd2ea-b3b7-41e0-bd68-d886c9d77c6a">$0.21</p>
+</td>
+<td style="width: 29.5208%;">
+<p data-id="3db9e68e-6ea3-48d3-83c7-3bc2715dc1e0">Octubre</p>
+</td>
+</tr>
+<tr>
+<td style="width: 44.6378%;">
+<p data-id="c9306115-42e1-4153-9592-d30124778787">KOF</p>
+</td>
+<td style="width: 25.8129%;">
+<p data-id="ca5b8da1-b152-4bdc-a8b2-fcc7d68e3102">$1.58</p>
+</td>
+<td style="width: 29.5208%;">
+<p data-id="fcdc8ef1-0ad8-471a-9d1d-2a4a9f3bcb4a">Noviembre</p>
+</td>
+</tr>
+<tr>
+<td style="width: 44.6378%;">
+<p data-id="7bdcb6ce-d573-4b5c-aa01-f8d976f8e89c">CAR</p>
+</td>
+<td style="width: 25.8129%;">
+<p data-id="89fdf52d-6c65-403b-b636-84ba0b9c7d22">$10.00</p>
+</td>
+<td style="width: 29.5208%;">
+<p data-id="467499d3-9cca-4d50-902e-11d16af74f83">Diciembre</p>
+</td>
+</tr>
+<tr>
+<td style="width: 44.6378%;">
+<p data-id="28f14099-9656-4312-b57c-312bae0ed075"><strong><mark data-color="#DFD150">Ganancias Totales</mark></strong></p>
+</td>
+<td style="width: 25.8129%;">
+<p data-id="5cbcebf7-c460-44db-9b9e-f809f672306d"><strong>$28.82</strong></p>
+</td>
+<td style="width: 29.5208%;">
+<p data-id="52df0ac4-e83f-48a6-a07e-0f5081d143bd"><strong>Anual</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>$GOOGL y como afecta el “sesgo” de Gemini?</title>
+        <author>
+            <name>Creom4te</name>
+        </author>
+        <link href="https://creom4te.com/googl-y-como-afecta-el-sesgo-de-gemini/"/>
+        <id>https://creom4te.com/googl-y-como-afecta-el-sesgo-de-gemini/</id>
+        <media:content url="https://creom4te.com/media/posts/5/Google-Gemini-2.png" medium="image" />
+            <category term="MercadoValores"/>
+            <category term="Inversiones"/>
+            <category term="Finanzas"/>
+            <category term="Cedears"/>
+
+        <updated>2024-04-21T11:30:34-03:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://creom4te.com/media/posts/5/Google-Gemini-2.png" alt="" />
+                    Voy a comenzar este “analisis”, mirando lo que en la mañana del 25/02/2024 @ElonMusk . Publicaba en su cuenta de X.
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://creom4te.com/media/posts/5/Google-Gemini-2.png" class="type:primaryImage" alt="" /></p>
+                <figure class="post__image"><img loading="lazy"  src="https://creom4te.com/media/posts/5/Google-Gemini.png" alt="" width="1200" height="750" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/5/responsive/Google-Gemini-xs.png 300w ,https://creom4te.com/media/posts/5/responsive/Google-Gemini-sm.png 480w ,https://creom4te.com/media/posts/5/responsive/Google-Gemini-md.png 768w"></figure>
+<div class="node-section" data-id="79fbeb82-d4c9-4357-a524-b11d41e9451b" data-background-color="#7e7e7e" data-show-on-website="true" data-show-in-email="true" data-show-to-non-subscribers="true" data-show-to-free-subscribers="true" data-show-to-paid-subscribers="true" data-show-with-referral-count="false" data-referral-count-value="0" data-referral-condition="lt" data-padding-top="0" data-padding-right="0" data-padding-bottom="0" data-padding-left="0" data-use-individual-padding="false" data-margin-top="0" data-margin-bottom="0" data-margin-left="0" data-margin-right="0" data-use-individual-margin="false" data-border-width-top="0" data-border-width-right="0" data-border-width-bottom="0" data-border-width-left="0" data-use-individual-border-width="false" data-border-top-left-radius="8" data-border-top-right-radius="8" data-border-bottom-right-radius="8" data-border-bottom-left-radius="8" data-use-individual-border-radius="false" data-border-style="solid" data-differing-visibility="false" data-pm-slice="3 2 []">
+<div class="node-section-inner"> </div>
+</div>
+<div class="node-section" data-id="36b6d6a6-2a9b-4577-a246-9ea931e42418" data-show-on-website="true" data-show-in-email="true" data-show-to-non-subscribers="true" data-show-to-free-subscribers="true" data-show-to-paid-subscribers="true" data-show-with-referral-count="false" data-referral-count-value="0" data-referral-condition="lt" data-padding-top="0" data-padding-right="0" data-padding-bottom="0" data-padding-left="0" data-use-individual-padding="false" data-margin-top="0" data-margin-bottom="0" data-margin-left="0" data-margin-right="0" data-use-individual-margin="false" data-border-width-top="0" data-border-width-right="0" data-border-width-bottom="0" data-border-width-left="0" data-use-individual-border-width="false" data-border-top-left-radius="0" data-border-top-right-radius="0" data-border-bottom-right-radius="0" data-border-bottom-left-radius="0" data-use-individual-border-radius="false" data-border-style="solid" data-differing-visibility="false">
+<div class="node-section-inner">
+<h4 data-id="ab1e4ada-95a6-4c60-8c6b-58ca8707f531">Voy a comenzar este “analisis”, mirando lo que en la mañana del 25/02/2024 <a target="_blank" rel="noopener noreferrer nofollow" class="link" href="https://twitter.com/elonmusk">@ElonMusk</a> . Publicaba en su cuenta de X.</h4>
+<div class="node-serviceEmbed" data-id="e2c6b3d1-02ed-49f1-844c-fa5faa4e28be" data-url="https://twitter.com/elonmusk/status/1761803527234470174" data-service="twitter" data-pm-slice="0 0 []">
+<div class="node-serviceEmbed" data-id="e2c6b3d1-02ed-49f1-844c-fa5faa4e28be" data-url="https://twitter.com/elonmusk/status/1761803527234470174" data-service="twitter" data-pm-slice="0 0 []">
+<div class="node-serviceEmbed" data-id="e2c6b3d1-02ed-49f1-844c-fa5faa4e28be" data-url="https://twitter.com/elonmusk/status/1761803527234470174" data-service="twitter" data-pm-slice="0 0 []"> </div>
+<div data-id="e2c6b3d1-02ed-49f1-844c-fa5faa4e28be" data-url="https://twitter.com/elonmusk/status/1761803527234470174" data-service="twitter" data-pm-slice="0 0 []"><figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/5/Screenshot-2024-04-21-at-11-24-47-Editing-Analizando-como-afecta-una-mala-implementacion-de-software-a-una-GRAN-Empresa.png" alt="" width="578" height="808" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/5/responsive/Screenshot-2024-04-21-at-11-24-47-Editing-Analizando-como-afecta-una-mala-implementacion-de-software-a-una-GRAN-Empresa-xs.png 300w ,https://creom4te.com/media/posts/5/responsive/Screenshot-2024-04-21-at-11-24-47-Editing-Analizando-como-afecta-una-mala-implementacion-de-software-a-una-GRAN-Empresa-sm.png 480w ,https://creom4te.com/media/posts/5/responsive/Screenshot-2024-04-21-at-11-24-47-Editing-Analizando-como-afecta-una-mala-implementacion-de-software-a-una-GRAN-Empresa-md.png 768w"></figure></div>
+<div data-id="e2c6b3d1-02ed-49f1-844c-fa5faa4e28be" data-url="https://twitter.com/elonmusk/status/1761803527234470174" data-service="twitter" data-pm-slice="0 0 []">
+<h4 id="esto-desperto-el-interes-en-mi-cabe" data-id="34612401-4aa4-4f3c-9556-8216d1b894ea" data-anchor="" data-anchor-title="Esto desperto el interes en mi cabeza, y mientras  …" data-anchor-id="esto-desperto-el-interes-en-mi-cabe" data-anchor-title-sync="true" data-anchor-id-sync="true" data-pm-slice="1 3 []">Esto desperto el interes en mi cabeza, y mientras me peinaba (con las manos) surgio la idea.</h4>
+<h4 id="saber-a-ciencia-cierta-como-afecta-" data-id="f0383730-f389-40ed-8ce2-d1f2a9dc17af" data-anchor="" data-anchor-title="Saber a ciencia cierta como afecta un “error” de i …" data-anchor-id="saber-a-ciencia-cierta-como-afecta-" data-anchor-title-sync="true" data-anchor-id-sync="true">Saber a ciencia cierta como afecta un “error” de implementación de software, en el patrimonio de mercado de la empresa.</h4>
+<ol data-id="171a2d4e-7e76-4698-9981-405a5a6d8848">
+<li>
+<p data-id="5ebc5da3-b929-423a-8f26-3f0118e26111">Paso uno tomar una captura sobre como cerro el mercado para $GOOGL el día 23/02/2024.</p>
+</li>
+<li>
+<p data-id="15c214ff-717a-407e-ad48-ca81c3f08d2e">Recopilar “algunos” comentarios en X que se expresen al respecto de <mark data-color="#edf338">Gemini</mark> y su sesgo racial.</p>
+</li>
+<li>
+<p data-id="030b99c9-4cb3-482a-8c1a-03c49fd60fbc">Buscar analisis realizados por inversores, analistas, consejeros, etc. Que fueran realizados en fecha 26/02/2024.</p>
+</li>
+<li>
+<p data-id="7cc8678a-fcfa-464c-a239-3fb6886a0c0f">Buscar información de la propia empresa Google que mencione esta cuestión de fondo.</p>
+</li>
+<li>
+<p data-id="d4f7354b-3cc4-4cc0-b2f6-f8ed5da6c343">Obtener una captura del cierre del mercado para el activo al cierre del mercado en fecha 26/02/2024.</p>
+</li>
+<li>
+<p data-id="0406c134-04fd-45ae-be55-9a49a2c7c99f">Finalmente emitir una conclusión al respecto considerando de ser posible el descubrimiento causal entre variables independientes y su posible asociación.</p>
+</li>
+</ol>
+</div>
+<div data-id="e2c6b3d1-02ed-49f1-844c-fa5faa4e28be" data-url="https://twitter.com/elonmusk/status/1761803527234470174" data-service="twitter" data-pm-slice="0 0 []"><figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/5/Captura-de-pantalla-2024-04-21-112750.png" alt="" width="587" height="669" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/5/responsive/Captura-de-pantalla-2024-04-21-112750-xs.png 300w ,https://creom4te.com/media/posts/5/responsive/Captura-de-pantalla-2024-04-21-112750-sm.png 480w ,https://creom4te.com/media/posts/5/responsive/Captura-de-pantalla-2024-04-21-112750-md.png 768w"></figure></div>
+<div data-id="e2c6b3d1-02ed-49f1-844c-fa5faa4e28be" data-url="https://twitter.com/elonmusk/status/1761803527234470174" data-service="twitter" data-pm-slice="0 0 []">
+<h4 id="la-diferencia-del-da-en-porcentaje-" data-id="09bc734f-1179-45d1-b937-123136afb06c" data-anchor="" data-anchor-title="La diferencia del día en porcentaje de perdida fue …" data-anchor-id="la-diferencia-del-da-en-porcentaje-" data-anchor-title-sync="true" data-anchor-id-sync="true" data-pm-slice="1 1 []">La diferencia del día en porcentaje de perdida fue del <mark data-color="#f10f0f">4,38%</mark>. Si lo ponemos en precios, tenemos una perdida de <mark data-color="#41ec0e">6.43 dólares</mark>. Entonces es claro que SI existió un efecto importante en el patrimonio de la empresa. Por lo tanto el problema con la generaciond e imagenes que tiene Gemini provoco esta baja.</h4>
+<h4 id="me-pregunto" data-id="5904cc18-9801-4875-b6b6-77f767f58bb7" data-anchor="" data-anchor-title="Me pregunto. " data-anchor-id="me-pregunto" data-anchor-title-sync="true" data-anchor-id-sync="true">Me pregunto.</h4>
+<h4 id="habr-amplificado-la-magnitud-de-la-" data-id="9581547d-01ab-4143-8ec5-c721eebc63cf" data-anchor="" data-anchor-title="Habrá amplificado la magnitud de la caída el fin d …" data-anchor-id="habr-amplificado-la-magnitud-de-la-" data-anchor-title-sync="true" data-anchor-id-sync="true">Habrá amplificado la magnitud de la caída el fin de semana?</h4>
+<h4 id="y-si-hubiera-sido-de-un-da-para-otr" data-id="6aaa9d68-4361-42f9-9396-b08f2de90c54" data-anchor="" data-anchor-title="Y si hubiera sido de un día para otro, habría impa …" data-anchor-id="y-si-hubiera-sido-de-un-da-para-otr" data-anchor-title-sync="true" data-anchor-id-sync="true">Y si hubiera sido de un día para otro, habría impactado de la misma manera?</h4>
+<h1 id="veamos-algunos-datos" data-id="a8912a41-48d0-4820-921a-236880347de9" data-anchor="" data-anchor-title="Veamos algunos datos." data-anchor-id="veamos-algunos-datos" data-anchor-title-sync="true" data-anchor-id-sync="true">Veamos algunos datos.</h1>
+<h4 id="hoy-la-vela-diaria-fue-una-vela-tot" data-id="582038f8-9aae-4217-bc92-24c3d91b9ba8" data-anchor="" data-anchor-title="Hoy la vela diaria fue una vela totalmente bajista …" data-anchor-id="hoy-la-vela-diaria-fue-una-vela-tot" data-anchor-title-sync="true" data-anchor-id-sync="true">Hoy la vela diaria fue una vela totalmente bajista, tan amplia que no solo se sobrepaso a la baja la media móvil de 50, sino que se la sobrepaso de sobremanera.</h4>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/5/Screenshot-2024-04-21-at-11-28-48-Editing-Analizando-como-afecta-una-mala-implementacion-de-software-a-una-GRAN-Empresa.png" alt="" width="558" height="297" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/5/responsive/Screenshot-2024-04-21-at-11-28-48-Editing-Analizando-como-afecta-una-mala-implementacion-de-software-a-una-GRAN-Empresa-xs.png 300w ,https://creom4te.com/media/posts/5/responsive/Screenshot-2024-04-21-at-11-28-48-Editing-Analizando-como-afecta-una-mala-implementacion-de-software-a-una-GRAN-Empresa-sm.png 480w ,https://creom4te.com/media/posts/5/responsive/Screenshot-2024-04-21-at-11-28-48-Editing-Analizando-como-afecta-una-mala-implementacion-de-software-a-una-GRAN-Empresa-md.png 768w"></figure>
+<h4 id="la-diferencia-del-da-en-porcentaje-" data-id="09bc734f-1179-45d1-b937-123136afb06c" data-anchor="" data-anchor-title="La diferencia del día en porcentaje de perdida fue …" data-anchor-id="la-diferencia-del-da-en-porcentaje-" data-anchor-title-sync="true" data-anchor-id-sync="true" data-pm-slice="1 1 []">La diferencia del día en porcentaje de perdida fue del <mark data-color="#f10f0f">4,38%</mark>. Si lo ponemos en precios, tenemos una perdida de <mark data-color="#41ec0e">6.43 dólares</mark>. Entonces es claro que SI existió un efecto importante en el patrimonio de la empresa. Por lo tanto el problema con la generaciond e imagenes que tiene Gemini provoco esta baja.</h4>
+<h4 id="me-pregunto" data-id="5904cc18-9801-4875-b6b6-77f767f58bb7" data-anchor="" data-anchor-title="Me pregunto. " data-anchor-id="me-pregunto" data-anchor-title-sync="true" data-anchor-id-sync="true">Me pregunto.</h4>
+<h4 id="habr-amplificado-la-magnitud-de-la-" data-id="9581547d-01ab-4143-8ec5-c721eebc63cf" data-anchor="" data-anchor-title="Habrá amplificado la magnitud de la caída el fin d …" data-anchor-id="habr-amplificado-la-magnitud-de-la-" data-anchor-title-sync="true" data-anchor-id-sync="true">Habrá amplificado la magnitud de la caída el fin de semana?</h4>
+<h4 id="y-si-hubiera-sido-de-un-da-para-otr" data-id="6aaa9d68-4361-42f9-9396-b08f2de90c54" data-anchor="" data-anchor-title="Y si hubiera sido de un día para otro, habría impa …" data-anchor-id="y-si-hubiera-sido-de-un-da-para-otr" data-anchor-title-sync="true" data-anchor-id-sync="true">Y si hubiera sido de un día para otro, habría impactado de la misma manera?</h4>
+<h1 id="veamos-algunos-datos" data-id="a8912a41-48d0-4820-921a-236880347de9" data-anchor="" data-anchor-title="Veamos algunos datos." data-anchor-id="veamos-algunos-datos" data-anchor-title-sync="true" data-anchor-id-sync="true">Veamos algunos datos.</h1>
+<h4 id="hoy-la-vela-diaria-fue-una-vela-tot" data-id="582038f8-9aae-4217-bc92-24c3d91b9ba8" data-anchor="" data-anchor-title="Hoy la vela diaria fue una vela totalmente bajista …" data-anchor-id="hoy-la-vela-diaria-fue-una-vela-tot" data-anchor-title-sync="true" data-anchor-id-sync="true">Hoy la vela diaria fue una vela totalmente bajista, tan amplia que no solo se sobrepaso a la baja la media móvil de 50, sino que se la sobrepaso de sobremanera.</h4>
+<div class="node-section" data-id="d4184c98-842a-4a5a-8a1c-7966fc13bb4c" data-show-on-website="true" data-show-in-email="true" data-show-to-non-subscribers="true" data-show-to-free-subscribers="true" data-show-to-paid-subscribers="true" data-show-with-referral-count="false" data-referral-count-value="0" data-referral-condition="lt" data-padding-top="0" data-padding-right="0" data-padding-bottom="0" data-padding-left="0" data-use-individual-padding="false" data-margin-top="0" data-margin-bottom="0" data-margin-left="0" data-margin-right="0" data-use-individual-margin="false" data-border-width-top="0" data-border-width-right="0" data-border-width-bottom="0" data-border-width-left="0" data-use-individual-border-width="false" data-border-top-left-radius="0" data-border-top-right-radius="0" data-border-bottom-right-radius="0" data-border-bottom-left-radius="0" data-use-individual-border-radius="false" data-border-color="#222222" data-border-style="solid" data-differing-visibility="false">
+<div class="node-section-inner"> </div>
+</div>
+<h4 id="uno-de-los-grandes-inversores-de-go" data-id="b400ce9c-fb85-4c29-b197-cc755a9a9336" data-anchor="" data-anchor-title="Uno de los grandes inversores de Google como lo es …" data-anchor-id="uno-de-los-grandes-inversores-de-go" data-anchor-title-sync="true" data-anchor-id-sync="true">Uno de los grandes inversores de Google como lo es Bill Ackman mediante <a target="_blank" rel="noopener noreferrer nofollow" class="link" href="https://13f.info/manager/0001336528-pershing-square-capital-management-l-p">Pershing Square Capital Management, L.P.</a> mantiene desde los últimos dos trimestres (Q3 y Q4) de 2023, un total de 4.354.824 acciones de $GOOGL y mantiene desde los tres trimestres (Q2, Q3, Q4) de 2023, un total de 9.377.195 acciones de $GOOG.</h4>
+<h4 id="al-31122023-appaloosa-lp-mantena-un" data-id="40a38de4-c9be-4888-9792-2a8040d2361e" data-anchor="" data-anchor-title="Al 31/12/2023, APPALOOSA LP mantenía un 5.6% de su …" data-anchor-id="al-31122023-appaloosa-lp-mantena-un" data-anchor-title-sync="true" data-anchor-id-sync="true">Al 31/12/2023, <a target="_blank" rel="noopener noreferrer nofollow" class="link" href="https://13f.info/manager/0001656456-appaloosa-lp">APPALOOSA LP</a> mantenía un 5.6% de su capital en $GOOG, es decir un total de 2.300.000 acciones de la empresa. Unas 450.000 acciones menos que el trimestre anterior. Quizás ahora te preguntes porque esto es relevante y en realidad es un ejemplo para plantar la idea que muchos grandes inversores que siguen a Alphabet entienden que es una empresa publicitaria, y a pesar de que es una gran empresa esta detrás de otras en áreas tan importantes actualmente como IA, servicios en la nube.</h4>
+<h3 id="para-continuar-con-el-analisis-regr" data-id="2bcca1d6-6725-40e4-ac60-75eb27372ec0" data-anchor="" data-anchor-title="Para continuar con el analisis regresamos a la lis …" data-anchor-id="para-continuar-con-el-analisis-regr" data-anchor-title-sync="true" data-anchor-id-sync="true">Para continuar con el analisis regresamos a la lista de tareas.</h3>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/5/Screenshot-2024-04-21-at-11-29-43-Editing-Analizando-como-afecta-una-mala-implementacion-de-software-a-una-GRAN-Empresa.png" alt="" width="520" height="726" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/5/responsive/Screenshot-2024-04-21-at-11-29-43-Editing-Analizando-como-afecta-una-mala-implementacion-de-software-a-una-GRAN-Empresa-xs.png 300w ,https://creom4te.com/media/posts/5/responsive/Screenshot-2024-04-21-at-11-29-43-Editing-Analizando-como-afecta-una-mala-implementacion-de-software-a-una-GRAN-Empresa-sm.png 480w ,https://creom4te.com/media/posts/5/responsive/Screenshot-2024-04-21-at-11-29-43-Editing-Analizando-como-afecta-una-mala-implementacion-de-software-a-una-GRAN-Empresa-md.png 768w"></figure>
+<h4 id="la-diferencia-del-da-en-porcentaje-" data-id="09bc734f-1179-45d1-b937-123136afb06c" data-anchor="" data-anchor-title="La diferencia del día en porcentaje de perdida fue …" data-anchor-id="la-diferencia-del-da-en-porcentaje-" data-anchor-title-sync="true" data-anchor-id-sync="true" data-pm-slice="1 1 []">La diferencia del día en porcentaje de perdida fue del <mark data-color="#f10f0f">4,38%</mark>. Si lo ponemos en precios, tenemos una perdida de <mark data-color="#41ec0e">6.43 dólares</mark>. Entonces es claro que SI existió un efecto importante en el patrimonio de la empresa. Por lo tanto el problema con la generaciond e imagenes que tiene Gemini provoco esta baja.</h4>
+<h4 id="me-pregunto" data-id="5904cc18-9801-4875-b6b6-77f767f58bb7" data-anchor="" data-anchor-title="Me pregunto. " data-anchor-id="me-pregunto" data-anchor-title-sync="true" data-anchor-id-sync="true">Me pregunto.</h4>
+<h4 id="habr-amplificado-la-magnitud-de-la-" data-id="9581547d-01ab-4143-8ec5-c721eebc63cf" data-anchor="" data-anchor-title="Habrá amplificado la magnitud de la caída el fin d …" data-anchor-id="habr-amplificado-la-magnitud-de-la-" data-anchor-title-sync="true" data-anchor-id-sync="true">Habrá amplificado la magnitud de la caída el fin de semana?</h4>
+<h4 id="y-si-hubiera-sido-de-un-da-para-otr" data-id="6aaa9d68-4361-42f9-9396-b08f2de90c54" data-anchor="" data-anchor-title="Y si hubiera sido de un día para otro, habría impa …" data-anchor-id="y-si-hubiera-sido-de-un-da-para-otr" data-anchor-title-sync="true" data-anchor-id-sync="true">Y si hubiera sido de un día para otro, habría impactado de la misma manera?</h4>
+<h1 id="veamos-algunos-datos" data-id="a8912a41-48d0-4820-921a-236880347de9" data-anchor="" data-anchor-title="Veamos algunos datos." data-anchor-id="veamos-algunos-datos" data-anchor-title-sync="true" data-anchor-id-sync="true">Veamos algunos datos.</h1>
+<h4 id="hoy-la-vela-diaria-fue-una-vela-tot" data-id="582038f8-9aae-4217-bc92-24c3d91b9ba8" data-anchor="" data-anchor-title="Hoy la vela diaria fue una vela totalmente bajista …" data-anchor-id="hoy-la-vela-diaria-fue-una-vela-tot" data-anchor-title-sync="true" data-anchor-id-sync="true">Hoy la vela diaria fue una vela totalmente bajista, tan amplia que no solo se sobrepaso a la baja la media móvil de 50, sino que se la sobrepaso de sobremanera.</h4>
+<div class="node-section" data-id="d4184c98-842a-4a5a-8a1c-7966fc13bb4c" data-show-on-website="true" data-show-in-email="true" data-show-to-non-subscribers="true" data-show-to-free-subscribers="true" data-show-to-paid-subscribers="true" data-show-with-referral-count="false" data-referral-count-value="0" data-referral-condition="lt" data-padding-top="0" data-padding-right="0" data-padding-bottom="0" data-padding-left="0" data-use-individual-padding="false" data-margin-top="0" data-margin-bottom="0" data-margin-left="0" data-margin-right="0" data-use-individual-margin="false" data-border-width-top="0" data-border-width-right="0" data-border-width-bottom="0" data-border-width-left="0" data-use-individual-border-width="false" data-border-top-left-radius="0" data-border-top-right-radius="0" data-border-bottom-right-radius="0" data-border-bottom-left-radius="0" data-use-individual-border-radius="false" data-border-color="#222222" data-border-style="solid" data-differing-visibility="false">
+<div class="node-section-inner"> </div>
+</div>
+<h4 id="uno-de-los-grandes-inversores-de-go" data-id="b400ce9c-fb85-4c29-b197-cc755a9a9336" data-anchor="" data-anchor-title="Uno de los grandes inversores de Google como lo es …" data-anchor-id="uno-de-los-grandes-inversores-de-go" data-anchor-title-sync="true" data-anchor-id-sync="true">Uno de los grandes inversores de Google como lo es Bill Ackman mediante <a target="_blank" rel="noopener noreferrer nofollow" class="link" href="https://13f.info/manager/0001336528-pershing-square-capital-management-l-p">Pershing Square Capital Management, L.P.</a> mantiene desde los últimos dos trimestres (Q3 y Q4) de 2023, un total de 4.354.824 acciones de $GOOGL y mantiene desde los tres trimestres (Q2, Q3, Q4) de 2023, un total de 9.377.195 acciones de $GOOG.</h4>
+<h4 id="al-31122023-appaloosa-lp-mantena-un" data-id="40a38de4-c9be-4888-9792-2a8040d2361e" data-anchor="" data-anchor-title="Al 31/12/2023, APPALOOSA LP mantenía un 5.6% de su …" data-anchor-id="al-31122023-appaloosa-lp-mantena-un" data-anchor-title-sync="true" data-anchor-id-sync="true">Al 31/12/2023, <a target="_blank" rel="noopener noreferrer nofollow" class="link" href="https://13f.info/manager/0001656456-appaloosa-lp">APPALOOSA LP</a> mantenía un 5.6% de su capital en $GOOG, es decir un total de 2.300.000 acciones de la empresa. Unas 450.000 acciones menos que el trimestre anterior. Quizás ahora te preguntes porque esto es relevante y en realidad es un ejemplo para plantar la idea que muchos grandes inversores que siguen a Alphabet entienden que es una empresa publicitaria, y a pesar de que es una gran empresa esta detrás de otras en áreas tan importantes actualmente como IA, servicios en la nube.</h4>
+<h3 id="para-continuar-con-el-analisis-regr" data-id="2bcca1d6-6725-40e4-ac60-75eb27372ec0" data-anchor="" data-anchor-title="Para continuar con el analisis regresamos a la lis …" data-anchor-id="para-continuar-con-el-analisis-regr" data-anchor-title-sync="true" data-anchor-id-sync="true">Para continuar con el analisis regresamos a la lista de tareas.</h3>
+<div class="node-serviceEmbed" data-id="9171c8e5-d796-44d3-bded-6addd3029b78" data-url="https://twitter.com/RealistNoReally/status/1762262174427193427" data-service="twitter"> </div>
+<div class="node-serviceEmbed" data-id="d3829e17-09c1-44f7-a191-696343f212e9" data-url="https://twitter.com/RoyLMattox/status/1762261599333552281" data-service="twitter"> </div>
+<h4 id="el-analista-wedbush-daniel-ives-men" data-id="13551e3c-daea-4b80-a6d5-f50e00330fde" data-anchor="" data-anchor-title="El analista Wedbush, Daniel Ives menciono que la v …" data-anchor-id="el-analista-wedbush-daniel-ives-men" data-anchor-title-sync="true" data-anchor-id-sync="true">El analista Wedbush, Daniel Ives menciono que la venta de este lunes 26/02/2024, es exagerada.</h4>
+<h4 id="aj-button-otro-analista-se-pregunto" data-id="f4d8ee52-a96f-413b-a212-80d0386ce1af" data-anchor="" data-anchor-title="A.J. Button otro analista, se pregunto si los erro …" data-anchor-id="aj-button-otro-analista-se-pregunto" data-anchor-title-sync="true" data-anchor-id-sync="true">A.J. Button otro analista, se pregunto si los errores de IA que tuvo Google con Gemini son un riesgo para los accionistas, atento a los antecedentes con Bard y su error que le costo el 9% a la baja de sus acciones.</h4>
+<h4 id="la-empresa-manifest-que-desactivo-l" data-id="faa3df50-c03e-45c3-961f-59f3f9017cb3" data-anchor="" data-anchor-title="La empresa manifestó que desactivo la funcionalida …" data-anchor-id="la-empresa-manifest-que-desactivo-l" data-anchor-title-sync="true" data-anchor-id-sync="true">La empresa manifestó que desactivo la funcionalidad de generación de imágenes hasta solucionar el problema. Lo cual indica seria en 2 semanas. Esto le costo la baja de +4% hoy.</h4>
+<h3 id="conclusin-ya-te-mostr-como-la-accin" data-id="0dc69893-7258-4407-907c-cc821f1cfa88" data-anchor="" data-anchor-title="Conclusión: Ya te mostré como la acción de Google  …" data-anchor-id="conclusin-ya-te-mostr-como-la-accin" data-anchor-title-sync="true" data-anchor-id-sync="true"><mark data-color="#2ce5a2">Conclusión</mark>: Ya te mostré como la acción de Google debido a su “error de sesgo” en la generación de imágenes, provoco la caída de +4% en el día de hoy. Incluso fui mas halla y te mostré que cuando lanzo BARD y este cometió el error de dar mala información sobre una estrella, cayo +9%.</h3>
+<h3 id="por-lo-tanto-es-comprensible-consid" data-id="1cf5aadb-e70a-4996-be06-c0cf2691b37c" data-anchor="" data-anchor-title="por lo tanto es comprensible considerar que cuando …" data-anchor-id="por-lo-tanto-es-comprensible-consid" data-anchor-title-sync="true" data-anchor-id-sync="true">por lo tanto es comprensible considerar que cuando una empresa como Google que “vive” de la publicidad, comete un error de estas características sufren las acciones de la misma y por lo tanto sufren los accionistas de la empresa.</h3>
+<h3 id="recomendacion-cuando-veas-una-notic" data-id="c85b5223-e80e-46b5-9ddb-03c1ce042ed6" data-anchor="" data-anchor-title="Recomendacion: cuando veas una noticia de caracter …" data-anchor-id="recomendacion-cuando-veas-una-notic" data-anchor-title-sync="true" data-anchor-id-sync="true"><mark data-color="#DFD150">Recomendacion</mark>: cuando veas una noticia de características negativas publicitarias vende! para re-comprar +++ abajo.</h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+            ]]>
+        </content>
+    </entry>
+</feed>
