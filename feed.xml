@@ -3,7 +3,7 @@
     <title>Cronicas de Creo </title>
     <link href="https://creom4te.com/feed.xml" rel="self" />
     <link href="https://creom4te.com" />
-    <updated>2024-09-06T21:21:08-03:00</updated>
+    <updated>2024-09-06T21:24:00-03:00</updated>
     <author>
         <name>Creom4te</name>
     </author>
@@ -115,6 +115,7 @@ plt.show()</code></pre>
         </author>
         <link href="https://creom4te.com/caidas-del-sandp500-historicas/"/>
         <id>https://creom4te.com/caidas-del-sandp500-historicas/</id>
+        <media:content url="https://creom4te.com/media/posts/13/1658021110571.jpg" medium="image" />
             <category term="MercadoValores"/>
             <category term="Inversiones"/>
             <category term="Finanzas"/>
@@ -122,11 +123,13 @@ plt.show()</code></pre>
         <updated>2024-08-07T13:53:21-03:00</updated>
             <summary>
                 <![CDATA[
+                        <img src="https://creom4te.com/media/posts/13/1658021110571.jpg" alt="" />
                     Este mes, en este año, el indice de las 500 empresas mas importantes del mundo (S&amp;P500) en la bolsa de&hellip;
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
+                    <p><img src="https://creom4te.com/media/posts/13/1658021110571.jpg" class="type:primaryImage" alt="" /></p>
                 <p class="align-center msg msg--highlight  ">Este mes, en este año, el indice de las 500 empresas mas importantes del mundo (<span style="text-decoration: underline; color: #3598db;">S&amp;P500</span>) en la bolsa de Estados Unidos. Mostro indicios de caida 💸📉 lo suficientemente evidentes para que la red X muestre una infinidad de posteos relacionadas a esta situacion.</p>
 <p>Las alzas de las tasas de la Reserva Federal acumuladas a lo largo de todo este tiempo, comenzaron a afectar el empleo, sector que siempre se resiente.</p>
 <p>El "factor sushi" 🇯🇵 🐟🍣 dijeron algunos amplifico la caida, ya que el mercado Japones mostro mediante el indice Nikkei una caida de mas del <span style="text-decoration: underline;">10%</span> en un dia.  </p>
