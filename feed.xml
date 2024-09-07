@@ -3,7 +3,7 @@
     <title>Cronicas de Creo </title>
     <link href="https://creom4te.com/feed.xml" rel="self" />
     <link href="https://creom4te.com" />
-    <updated>2024-09-06T21:07:56-03:00</updated>
+    <updated>2024-09-06T21:21:08-03:00</updated>
     <author>
         <name>Creom4te</name>
     </author>
@@ -17,6 +17,9 @@
         <link href="https://creom4te.com/salida-reludotentradawb/"/>
         <id>https://creom4te.com/salida-reludotentradawb/</id>
         <media:content url="https://creom4te.com/media/posts/14/MNIST-.webp" medium="image" />
+            <category term="Inteligencia Artificial"/>
+            <category term="IA"/>
+            <category term="DeepLearning"/>
 
         <updated>2024-09-06T08:47:25-03:00</updated>
             <summary>
@@ -81,7 +84,7 @@ test_images = test_images.astype("float32") / 255
 <p><span style="color: #000000;">El resultado de entrenar el modelo nos ofrecera informacion sobre el progreso de entrenamiento. El valor de perdida (loss) que para cada epoca nos dira cuan bien o mal el modelo esta ajustando sus predicciones a las etiquetas verdaderas. Por otro lado la precision (acurracy) es decir la cantidad de predicciones correctas que el modelo hace.</span></p>
 <p><span style="color: #000000;">Y finalmente la perdida del conjunto de validacion para cada epoca y la precision del modelo para cada epoca del conjunto de validacion.</span></p>
 <p><span style="color: #000000;">Abajo te mostramos un ejemplo del resultado de entrenar el modelo:</span></p>
-<figure class="post__image"><img loading="lazy"  src="https://creom4te.com/media/posts/14/Captura-de-pantalla-2024-09-06-082156-2.png" alt="" width="1301" height="268" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/14/responsive/Captura-de-pantalla-2024-09-06-082156-2-xs.png 300w ,https://creom4te.com/media/posts/14/responsive/Captura-de-pantalla-2024-09-06-082156-2-sm.png 480w ,https://creom4te.com/media/posts/14/responsive/Captura-de-pantalla-2024-09-06-082156-2-md.png 768w"></figure>
+<figure class="post__image post__image--full"><img loading="lazy"  src="https://creom4te.com/media/posts/14/Captura-de-pantalla-2024-09-06-082156-2.png" alt="" width="1301" height="268" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/14/responsive/Captura-de-pantalla-2024-09-06-082156-2-xs.png 300w ,https://creom4te.com/media/posts/14/responsive/Captura-de-pantalla-2024-09-06-082156-2-sm.png 480w ,https://creom4te.com/media/posts/14/responsive/Captura-de-pantalla-2024-09-06-082156-2-md.png 768w"></figure>
 <p><span style="color: #000000;">Bueno hagamos algunos experimentos mas:</span></p>
 <pre class="language-apacheconf"><code>modelo = load_model('mi_modelo.h5')
 digitos_a_testear = test_images[99]
