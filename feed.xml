@@ -3,7 +3,7 @@
     <title>Cronicas de Creo </title>
     <link href="https://creom4te.com/feed.xml" rel="self" />
     <link href="https://creom4te.com" />
-    <updated>2024-09-16T12:28:16-03:00</updated>
+    <updated>2024-09-16T12:52:02-03:00</updated>
     <author>
         <name>Creom4te</name>
     </author>
@@ -16,15 +16,18 @@
         </author>
         <link href="https://creom4te.com/etiquetar-el-eslabon-mas-debil/"/>
         <id>https://creom4te.com/etiquetar-el-eslabon-mas-debil/</id>
+        <media:content url="https://creom4te.com/media/posts/15/Creo-que-a-visto-un-lindo-gatito.png" medium="image" />
 
         <updated>2024-09-16T10:54:56-03:00</updated>
             <summary>
                 <![CDATA[
+                        <img src="https://creom4te.com/media/posts/15/Creo-que-a-visto-un-lindo-gatito.png" alt="" />
                     Hola Lector! espero te encuentres bien. En el mundo da la IA, una tarea "comun" es la actividad de etiquetado.
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
+                    <p><img src="https://creom4te.com/media/posts/15/Creo-que-a-visto-un-lindo-gatito.png" class="type:primaryImage" alt="" /></p>
                 <p>Hola Lector! espero te encuentres bien.</p>
 <p>En el mundo da la IA, una tarea "comun" es la actividad de etiquetado.</p>
 <p>Pensandolo bien, en realidad deberia haberlo puesto subrayado, algo asi: <span style="text-decoration: underline;">COMUN</span>. Ya que no tiene nada de comun!. En realidad es una actividad laboriosa, que requiere de mucha concentracion y capacidad analitica humana, requiere de un despliegue enorme de creatividad, simplificacion y precision.</p>
