@@ -3,7 +3,7 @@
     <title>Cronicas de Creo </title>
     <link href="https://creom4te.com/feed.xml" rel="self" />
     <link href="https://creom4te.com" />
-    <updated>2024-09-16T18:02:20-03:00</updated>
+    <updated>2024-09-16T18:13:25-03:00</updated>
     <author>
         <name>Creom4te</name>
     </author>
@@ -46,9 +46,9 @@
 <li><span style="color: #f1c40f;">LabelImg</span> - escrita en python de facil uso e implementacion, el repositorio github donde podes descargarlo es <a href="https://github.com/HumanSignal/labelImg">LabelImg</a> donde ademas, vas a ver como se utiliza de forma rapida. </li>
 <li><span style="color: #f1c40f;">voTT</span> - de Microsoft, tambien de codigo abierto, con una interfaz distinta y con algunas funcionalidades mas que LabelImg. El repositorio donde podes descargarla es <a href="https://github.com/microsoft/VoTT">voTT</a> de igual manera que la anterior podes ver el README y facilmente usarla.</li>
 </ul>
-<p>Hay mas claro, pero con estas dos es mas que suficiente para empezar.</p>
-<p>Por cierto si decidis usar LabelImg, puede que tengas algunos "problemas" al usarlo. Como que intentes etiquetar algo y de repente se cierre la aplicacion.</p>
-<p class="msg msg--highlight  msg--info">Si ese es tu caso y te sale algo asi como <em>error en Qt5 porque no logra convertir de flotante a entero</em>. Vas a tener que hacer unos cambios en tu libreria <span style="text-decoration: underline;">libs</span> de python, especificamente en el script <em>canvas.py</em></p>
+<p>Hay mas! claro, pero con estas dos es mas que suficiente para empezar.</p>
+<p>Por cierto y antes de que se me pase. Si decidis usar LabelImg, puede que tengas algunos "problemas" al usarlo. Como por ejemplo, que intentes etiquetar algo y de repente se te cierre la aplicacion.</p>
+<p class="msg msg--highlight  msg--info">Si ese es tu caso y te sale algo asi como <em>error en Qt5 porque no logra convertir de flotante a entero</em>. Vas a tener que hacer algunos cambios en tu libreria <span style="text-decoration: underline;">libs</span> de python, especificamente en el script <em>canvas.py</em></p>
 <pre class="language-python"><code># En la linea 526, por defecto tiene esto:
 p.drawRect(left_top.x(), left_top.y(), rect_width), int(rect_height)
 # Tenes que cambiarlo por esto:
@@ -70,20 +70,22 @@ bar.setValue(bar.value() + bar.singleStep() * units)
 # Cambialo por esto:
 bar.setValue(int(bar.value() + bar.singleStep() * units))
 </code></pre>
-<p>Con esos cambios deberias poder hacer uso de LabelImg sin problemas y bueno solo quedaria arrancar con el etiquetado para lo cual te recomiendo unos termos de mate o de cafe y un buen almohadon para la silla. 🤣</p>
+<p>Con esos cambios deberias poder hacer uso de LabelImg sin problemas y ya solo quedaria dar inicio a la tarea de etiquetado para lo cual te recomiendo que antes te prepares unos buenos termos de mate o de cafe en su defecto y un buen almohadon para la silla. 🤣</p>
 <h4>Metodos.</h4>
-<p>Yo recomiendo siempre hacer las cosas por uno mismo peroo... cuando la tarea es mayuscula, lo mejor es conseguir capital humano de ayuda. Y ahi es cuando nos topamos con la gran problematica de todos los investigadores, el capital humano necesario para el desarrollo.</p>
+<p>En cuanto a la forma de llevar adelante la tarea de etiquetado puedo decirte que muchos la categorizan, como actividad de "preprocesamiento".  Y yo no podria estar mas en desacuerdo!, ya que al usar esa palabra de forma sencilla, da a entender al usuario que dicha actividad es menor y no requiere mas atencion de la necesaria.</p>
+<p>Personalmente recomiendo siempre hacer las cosas por uno mismo peroo... cuando la tarea es mayuscula, lo mejor es conseguir capital humano de ayuda. Y justo ahi es cuando nos topamos con la gran problematica de todos los investigadores, el capital humano necesario para el desarrollo en investigacion.</p>
 <p>Hay sitios que ofrecen ayudarte con la tarea por un determinado precio claro, como:</p>
 <ul>
-<li><a href="https://www.mturk.com/">Turk de Amazon</a>, permite contratar a una comunidad global para realizar tareas de etiquetado manual de datos.</li>
+<li><a href="https://www.mturk.com/">Turk de Amazon</a>, que permite contratar a una comunidad global para realizar tareas de etiquetado manual de datos.</li>
 <li><a href="https://www.appen.com/">Appen</a>, para proyectos que involucran texto, imágenes, audio y video. Igual que turk mediante colaboradores.</li>
 </ul>
-<p>Hay otros mas claro! pero la idea no es promocionarlos sino que veas que los servicios de terceros, primero se pagan! y segundo requieren de otros seres humanos. Por lo tanto podriamos usar la referencia famosa de los jueguitos en linea "PAY TO WIN".</p>
-<p>Ademas claro de la complicacion de que tus datos seran distribuidos por el mundo a quien sabe que personas con la posibilidad de que los mismos sean utilizados por terceros. </p>
+<p>Y tambien hay otros mas claro! pero la idea no es promocionarlos sino, que veas que los servicios de terceros, primero se pagan y segundo requieren de otros seres humanos. Por lo tanto podriamos usar la referencia famosa de los jueguitos en linea que para lograr el objetivo de tu investigacion "PAY TO WIN".</p>
+<p>Ademas claro! de la complicacion que tus datos seran distribuidos por el mundo a quien sabe que personas, con la posibilidad de que los mismos sean utilizados por terceros. </p>
 <h4>Hardware.</h4>
 <p>Creo que este es el punto mas amigable por llamarlo de alguna manera. Ya que con cualquier minimo hardware podes llevar adelante una tarea de etiquetado. Teniendo en cuenta claro que vas a necesitar de MUCHO espacio de almacenamiento.</p>
-<p>Si la tarea es mayuscula y no es una tarea de las que solicita Elon Musk a su gente. Entonces con unos cuantos discos externos o internos de almacenamiento podes tener varios teras de almacenaje.</p>
-<p>Bueno espero que te sirva y te haya agradado la lectura. Nos vemos en la proxima y ya sabes no dudes en mandar un mail si necesitas ayuda.</p>
+<p>Si la tarea es mayuscula pero no como esas tareas de las que solicita Elon Musk a su gente. Entonces con unos cuantos discos externos o internos de almacenamiento podes tener varios terabytes de almacenaje.</p>
+<p>Hasta aca llegamos por hoy!</p>
+<p>Espero que te sirva y te haya agradado la lectura. Nos vemos en la proxima y ya sabes no dudes en mandar un mail si necesitas ayuda.</p>
             ]]>
         </content>
     </entry>
