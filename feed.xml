@@ -3,7 +3,7 @@
     <title>Cronicas de Creo </title>
     <link href="https://creom4te.com/feed.xml" rel="self" />
     <link href="https://creom4te.com" />
-    <updated>2024-09-16T12:52:02-03:00</updated>
+    <updated>2024-09-16T18:02:20-03:00</updated>
     <author>
         <name>Creom4te</name>
     </author>
@@ -30,12 +30,13 @@
                     <p><img src="https://creom4te.com/media/posts/15/Creo-que-a-visto-un-lindo-gatito.png" class="type:primaryImage" alt="" /></p>
                 <p>Hola Lector! espero te encuentres bien.</p>
 <p>En el mundo da la IA, una tarea "comun" es la actividad de etiquetado.</p>
-<p>Pensandolo bien, en realidad deberia haberlo puesto subrayado, algo asi: <span style="text-decoration: underline;">COMUN</span>. Ya que no tiene nada de comun!. En realidad es una actividad laboriosa, que requiere de mucha concentracion y capacidad analitica humana, requiere de un despliegue enorme de creatividad, simplificacion y precision.</p>
-<p>Espero que con lo dicho no te sientas frustrado y puedas darte cuenta que etiquetar es todo. Menos "comun", sin embargo  a pesar de esta circunstancia. No consigo informacion sustanciosa y fundamental para lograr mejorar el etiquetado. Al menos hasta la fecha. Pero estoy seguro de que voy a lograrlo!.</p>
+<p>Pensandolo bien, en realidad deberia haberlo puesto subrayado, algo asi:</p>
+<p>"<em>En el mundo de IA, una tarea</em> <span style="text-decoration: underline;">COMUN</span> <em>es la actividad de etiquetado</em>". Ya que, es cierto que no tiene nada de comun!. En realidad es una actividad laboriosa, que no solo requiere de mucha concentracion y capacidad analitica humana, sino que tambien requiere de un despliegue enorme de creatividad, simplificacion y precision.</p>
+<p>Espero que con lo dicho no te sientas frustrado y puedas darte cuenta que etiquetar es todo menos una tarea "comun", sin embargo  a pesar de esta circunstancia. No logro consegir informacion sustanciosa y fundamental que me permita lograr mejorar el etiquetado. Al menos hasta la fecha. Pero estoy seguro de que voy a lograrlo!.</p>
 <p>Segun <a href="https://www.ibm.com/mx-es/topics/data-labeling" target="_blank" rel="noopener noreferrer">IBM</a> "<span style="color: #f1c40f;">...<em>Requiere la identificación de datos sin procesar</em>...</span>", y me pregunto... Realmente entendera IBM que significa <em>identificar</em>?</p>
 <p>Es una tarea mayuscula la de identificar.</p>
-<p>Requiere que logres sin lugar a dudas asociar caracteristicas o elementos suficientes a un objeto o representacion. Que permita a cualquier persona, sea quien sea, y con cualquier tipo de conocimiento basico acerca de la tematica que represente el objeto o representacion. <em><span style="text-decoration: underline;">Saber</span></em>! ante que se encuentra.</p>
-<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/15/Leopardo2-2.png" alt="" width="427" height="640" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/15/responsive/Leopardo2-2-xs.png 300w ,https://creom4te.com/media/posts/15/responsive/Leopardo2-2-sm.png 480w ,https://creom4te.com/media/posts/15/responsive/Leopardo2-2-md.png 768w"></figure>
+<p>Requiere que logres sin lugar a dudas asociar caracteristicas o elementos suficientes a un objeto. Que permita a cualquier persona, sea quien sea, y con conocimiento basico acerca de la tematica que represente el objeto de la tarea. <em><span style="text-decoration: underline;">Saber</span></em>! que representan esas caracteristicas.</p>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/15/Manchas.png" alt="" width="427" height="640" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/15/responsive/Manchas-xs.png 300w ,https://creom4te.com/media/posts/15/responsive/Manchas-sm.png 480w ,https://creom4te.com/media/posts/15/responsive/Manchas-md.png 768w"></figure>
 <p>Imaginemos el caso de la figura anterior un "Felino". Cualquiera puede saber que se trata de un Felino pero alguien lo podria identificar con solo verlo? Es decir alguien podria decirme rapidamente esa foto es de un... por ejemplo "<em>Tigre</em>"?</p>
 <p>Ahora si logran dimensionar que la palabra "identificar". No es solo un mero verbo?.</p>
 <p>Bueno antes de seguir te quiero decir que el felino de arriba es un... <a href="https://es.wikipedia.org/wiki/Panthera_pardus">abri y descubrilo!</a> . Este felino, tiene caracteristicas que lo distinguen y diferencian del resto de felinos similares de su especie. Entonces, si logramos establecer esas caracteristicas de forma cierta, podemos decir que estariamos "identificandolo".</p>
