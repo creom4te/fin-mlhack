@@ -3,7 +3,7 @@
     <title>Cronicas de Creo </title>
     <link href="https://creom4te.com/feed.xml" rel="self" />
     <link href="https://creom4te.com" />
-    <updated>2024-09-16T18:13:25-03:00</updated>
+    <updated>2024-09-16T18:48:32-03:00</updated>
     <author>
         <name>Creom4te</name>
     </author>
@@ -33,6 +33,19 @@
 <p>Pensandolo bien, en realidad deberia haberlo puesto subrayado, algo asi:</p>
 <p>"<em>En el mundo de IA, una tarea</em> <span style="text-decoration: underline;">COMUN</span> <em>es la actividad de etiquetado</em>". Ya que, es cierto que no tiene nada de comun!. En realidad es una actividad laboriosa, que no solo requiere de mucha concentracion y capacidad analitica humana, sino que tambien requiere de un despliegue enorme de creatividad, simplificacion y precision.</p>
 <p>Espero que con lo dicho no te sientas frustrado y puedas darte cuenta que etiquetar es todo menos una tarea "comun", sin embargo  a pesar de esta circunstancia. No logro consegir informacion sustanciosa y fundamental que me permita lograr mejorar el etiquetado. Al menos hasta la fecha. Pero estoy seguro de que voy a lograrlo!.</p>
+<p>Entonces caminando al nucleo del tema en cuestion si queremos ETIQUETAR tenemos que seguir una serie de pasos fundamentales y necesarios a saber:</p>
+<ul style="list-style-type: circle;">
+<li>Contar con una cantidad suficiente de datos para establecer caracteristicas. Por ejemplo si nuestra tarea implica identificar vehiculos, deberemos contar con suficientes datos (imagenes), que contengan vehiculos.</li>
+<li>Imagen a imagen o frame a frame en caso de ser un video, mediante la utilizacion de software dedicado, representar en la imagen mediante una serie de puntos el area de interes que la red luego debera tener en cuenta.</li>
+<li>Distribuir las imagenes y sus representaciones (etiquetas) en una estructura acorde a la red que queremos entrenar.</li>
+</ul>
+<figure class="post__image post__image--center" ><img loading="lazy" src="https://creom4te.com/media/posts/15/dataset2.png" alt="Conjunto de Datos creados para YOLO" width="127" height="133" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/15/responsive/dataset2-xs.png 300w ,https://creom4te.com/media/posts/15/responsive/dataset2-sm.png 480w ,https://creom4te.com/media/posts/15/responsive/dataset2-md.png 768w">
+<figcaption >Conjunto de datos creado para YOLO.</figcaption>
+</figure>
+<figure ><figure class="post__image post__image--center"><img loading="lazy"  src="https://creom4te.com/media/posts/15/dataset1.png" alt="" width="1126" height="627" sizes="(max-width: 48em) 100vw, 768px" srcset="https://creom4te.com/media/posts/15/responsive/dataset1-xs.png 300w ,https://creom4te.com/media/posts/15/responsive/dataset1-sm.png 480w ,https://creom4te.com/media/posts/15/responsive/dataset1-md.png 768w"></figure>
+<figcaption >Imagenes en formato .jpg y etiquetas en formato .txt</figcaption>
+</figure>
+<h4>Identificar.</h4>
 <p>Segun <a href="https://www.ibm.com/mx-es/topics/data-labeling" target="_blank" rel="noopener noreferrer">IBM</a> "<span style="color: #f1c40f;">...<em>Requiere la identificación de datos sin procesar</em>...</span>", y me pregunto... Realmente entendera IBM que significa <em>identificar</em>?</p>
 <p>Es una tarea mayuscula la de identificar.</p>
 <p>Requiere que logres sin lugar a dudas asociar caracteristicas o elementos suficientes a un objeto. Que permita a cualquier persona, sea quien sea, y con conocimiento basico acerca de la tematica que represente el objeto de la tarea. <em><span style="text-decoration: underline;">Saber</span></em>! que representan esas caracteristicas.</p>
