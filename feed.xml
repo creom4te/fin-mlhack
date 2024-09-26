@@ -14,8 +14,8 @@
         <author>
             <name>Creom4te</name>
         </author>
-        <link href="https://creom4te.com/calibracion-de-modelos-de-inteligencia-artificial/"/>
-        <id>https://creom4te.com/calibracion-de-modelos-de-inteligencia-artificial/</id>
+        <link href="https://creom4te.com/calibracion-de-modelos-de-inteligencia-artificial/index.html"/>
+        <id>https://creom4te.com/calibracion-de-modelos-de-inteligencia-artificial/index.html</id>
         <media:content url="https://creom4te.com/media/posts/17/calibre.jpg" medium="image" />
             <category term="Inteligencia Artificial"/>
             <category term="IA"/>
@@ -126,8 +126,8 @@ print(f'Error de Calibración Esperado (ECE): {ece:.4f}')
         <author>
             <name>Creom4te</name>
         </author>
-        <link href="https://creom4te.com/etiquetando/"/>
-        <id>https://creom4te.com/etiquetando/</id>
+        <link href="https://creom4te.com/etiquetando/index.html"/>
+        <id>https://creom4te.com/etiquetando/index.html</id>
         <media:content url="https://creom4te.com/media/posts/16/logo-labelimg-2.png" medium="image" />
             <category term="YOLO"/>
             <category term="IA"/>
@@ -256,8 +256,8 @@ print(f'Error de Calibración Esperado (ECE): {ece:.4f}')
         <author>
             <name>Creom4te</name>
         </author>
-        <link href="https://creom4te.com/etiquetar-el-eslabon-mas-debil/"/>
-        <id>https://creom4te.com/etiquetar-el-eslabon-mas-debil/</id>
+        <link href="https://creom4te.com/etiquetar-el-eslabon-mas-debil/index.html"/>
+        <id>https://creom4te.com/etiquetar-el-eslabon-mas-debil/index.html</id>
         <media:content url="https://creom4te.com/media/posts/15/Creo-que-a-visto-un-lindo-gatito.png" medium="image" />
 
         <updated>2024-09-16T10:54:56-03:00</updated>
@@ -349,8 +349,8 @@ bar.setValue(int(bar.value() + bar.singleStep() * units))
         <author>
             <name>Creom4te</name>
         </author>
-        <link href="https://creom4te.com/salida-reludotentradawb/"/>
-        <id>https://creom4te.com/salida-reludotentradawb/</id>
+        <link href="https://creom4te.com/salida-reludotentradawb/index.html"/>
+        <id>https://creom4te.com/salida-reludotentradawb/index.html</id>
         <media:content url="https://creom4te.com/media/posts/14/MNIST-.webp" medium="image" />
             <category term="Inteligencia Artificial"/>
             <category term="IA"/>
@@ -448,8 +448,8 @@ plt.show()</code></pre>
         <author>
             <name>Creom4te</name>
         </author>
-        <link href="https://creom4te.com/caidas-del-sandp500-historicas/"/>
-        <id>https://creom4te.com/caidas-del-sandp500-historicas/</id>
+        <link href="https://creom4te.com/caidas-del-sandp500-historicas/index.html"/>
+        <id>https://creom4te.com/caidas-del-sandp500-historicas/index.html</id>
         <media:content url="https://creom4te.com/media/posts/13/1658021110571.jpg" medium="image" />
             <category term="MercadoValores"/>
             <category term="Inversiones"/>
@@ -487,8 +487,8 @@ plt.show()</code></pre>
         <author>
             <name>Creom4te</name>
         </author>
-        <link href="https://creom4te.com/datos/"/>
-        <id>https://creom4te.com/datos/</id>
+        <link href="https://creom4te.com/datos/index.html"/>
+        <id>https://creom4te.com/datos/index.html</id>
 
         <updated>2024-04-27T23:20:04-03:00</updated>
             <summary>
@@ -545,8 +545,8 @@ plt.show()</code></pre>
         <author>
             <name>Creom4te</name>
         </author>
-        <link href="https://creom4te.com/ms-dos/"/>
-        <id>https://creom4te.com/ms-dos/</id>
+        <link href="https://creom4te.com/ms-dos/index.html"/>
+        <id>https://creom4te.com/ms-dos/index.html</id>
         <media:content url="https://creom4te.com/media/posts/11/39.png" medium="image" />
 
         <updated>2024-04-25T20:04:53-03:00</updated>
@@ -571,8 +571,8 @@ plt.show()</code></pre>
         <author>
             <name>Creom4te</name>
         </author>
-        <link href="https://creom4te.com/enfoque-causal-o-estadistico/"/>
-        <id>https://creom4te.com/enfoque-causal-o-estadistico/</id>
+        <link href="https://creom4te.com/enfoque-causal-o-estadistico/index.html"/>
+        <id>https://creom4te.com/enfoque-causal-o-estadistico/index.html</id>
         <media:content url="https://creom4te.com/media/posts/10/66.png" medium="image" />
 
         <updated>2024-04-24T21:01:55-03:00</updated>
@@ -650,8 +650,8 @@ except FileNotFoundError:
         <author>
             <name>Creom4te</name>
         </author>
-        <link href="https://creom4te.com/cookies-vectores-de-ataque/"/>
-        <id>https://creom4te.com/cookies-vectores-de-ataque/</id>
+        <link href="https://creom4te.com/cookies-vectores-de-ataque/index.html"/>
+        <id>https://creom4te.com/cookies-vectores-de-ataque/index.html</id>
         <media:content url="https://creom4te.com/media/posts/9/cookies.png" medium="image" />
 
         <updated>2024-04-22T13:57:33-03:00</updated>
@@ -700,8 +700,8 @@ except FileNotFoundError:
         <author>
             <name>Creom4te</name>
         </author>
-        <link href="https://creom4te.com/y-si-tu-pc-esta-infectada/"/>
-        <id>https://creom4te.com/y-si-tu-pc-esta-infectada/</id>
+        <link href="https://creom4te.com/y-si-tu-pc-esta-infectada/index.html"/>
+        <id>https://creom4te.com/y-si-tu-pc-esta-infectada/index.html</id>
         <media:content url="https://creom4te.com/media/posts/8/Screenshot-2024-04-21-at-15-35-04-Y-si-tu-PC-esta-infectada-LinkedIn.png" medium="image" />
             <category term="SeguridadInformatica"/>
             <category term="Hacking"/>
